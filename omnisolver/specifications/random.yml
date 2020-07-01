@@ -1,0 +1,15 @@
+schema_version: 1
+parser_name: "random"
+sampler_class: "omnisolver.samplers.random.RandomSampler"
+description: "A purely random solver"
+
+init_args:
+  - name: "prob"
+    help: "probability of choosing 1 (default 0.5)"
+    type: "float"
+    default: 0.5
+sample_args:
+  - name: "num_reads"
+    help: "number of samples to draw"
+    type: "int"
+    default: 1

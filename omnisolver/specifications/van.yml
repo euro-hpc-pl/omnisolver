@@ -1,0 +1,143 @@
+schema_version: 1
+parser_name: "van"
+sampler_class: "omnisolver.samplers.van.VanSampler"
+description: "A sampler based on Variational Autoregressive Networks"
+
+init_args:
+
+  - name: "net_depth"
+    help: "The depth of the network"
+    type: "int"
+    default: 1
+
+  - name: "net_width"
+    help: "The width of the network"
+    type: "int"
+    default: 1
+
+  - name: "bias"
+    help: "Whether to use bias in the network parameters"
+    action: "store_true"
+
+  - name: "z2"
+    help: "use Z2 symmetry in sample and loss"
+    action: "store_true"
+
+  - name: "res_block"
+    help: "Whether to use the res block"
+    action: "store_true"
+
+  - name: "x_hat_clip"
+    help: "x_hat clipping, 0 means no clipping"
+    type: "float"
+    default: 0
+  
+  - name: "epsilon"
+    help: "Value of epsilon (i.e. what we consider as zero)"
+    type: "float"
+    default: 1e-7
+
+  - name: "cuda"
+    help: "ID of GPU to use, -1 for disable"
+    type: "int"
+    default: 0
+    
+sample_args:
+  - name: "beta"
+    help: "Initial value of the inverse temperature"
+    type: "float"
+    default: 0.1
+  
+  - name: "beta_anneal_to"
+    help: "Target value of the inverse temperature"
+    type: "float"
+    default: 5.
+
+  - name: "max_step"
+    help: "Maximum number of annealing steps"
+    type: "int"
+    default: 1000
+
+  - name: "batch_size"
+    help: "Size of the batch"
+    type: "int"
+    default: 10000
+
+  - name: "optimizer"
+    help: "Optimizer"
+    choices: ['sgd', 'sgdm', 'rmsprop', 'adam', 'adam0.5']
+    type: "str"
+    default: "adam"
+
+  - name: "lr"
+    help: "Learning rate"
+    type: "float"
+    default: 1e-3
+
+  - name: "clip_grad"
+    help: "Gradient clipping threshold. -1 means no clipping"
+    type: "float"
+    default: -1
+
+  - name: "beta_inc"
+    help: "Inverse temperature step"
+    type: "float"
+    default: 0.1
+
+  - name: "no_stdout"
+    help: "No stdout printing for better performance"
+    action: "store_true"
+
+  - name: "clear_checkpoint"
+    help: "Whether to clear saved checkpoints"
+    action: "store_true"
+  
+  - name: "print_step"
+    help: "number of steps to print log, 0 for disabled"
+    type: "int"
+    default: 1
+
+  - name: "save step"
+    help: "number of steps to save network weights, 0 for disabled"
+    type: "int"
+    default: 100
+
+  - name: "visual_step"
+    help: "number of steps to visualize samples, 0 for disabled"
+    type: "int"
+    default: 100
+
+  - name: "save_sample"
+    help: "save samples on print_step"
+    action: "store_true"
+
+  - name: "print_sample"
+    help: "number of samples to print to log on visual_step, 0 for disabled"
+    type: "int"
+    default: 1
+
+  - name: "print_grad"
+    help: "print summary of gradients for each parameter on visual_step"
+    action: "store_true"
+
+  - name: "out_infix"
+    help: "infix in output filename to distinguish repeated runs"
+    type: "str"
+    default: ""
+
+  - name: "out_dir"
+    help: "directory prefix for output, empty for disabled"
+    type: "str"
+    default: "out"
+
+  - name: "fname"
+    help: "file name to append the results to"
+    type: "str"
+    default: "out.txt"
+
+
+
+
+
+
+  
