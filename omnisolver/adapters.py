@@ -26,11 +26,12 @@ class Adapter(Protocol):
         pass
 
 
-class SimpleAdapter:
+class SimpleAdapter(Adapter):
 
     type_mapping = {"bool": bool, "int": int, "float": float, "str": str}
 
     def __init__(self, specification) -> None:
+        super().__init__()
         if specification["schema_version"] != 1:
             raise ValueError("Unknown version of specification file.")
         self.sample_args_spec = specification["sample_args"]
