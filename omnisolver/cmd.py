@@ -1,17 +1,28 @@
 """Command line interface for omnisolver."""
 import argparse
 from typing import Iterable
-from pkg_resources import resource_listdir, resource_stream
-from omnisolver.adapters import Adapter, SimpleAdapter
+from pkg_resources import resource_stream
+import pluggy
 import yaml
+from omnisolver.adapters import Adapter, SimpleAdapter
+from omnisolver.plugin.hookspecs import simple_sampler
+import omnisolver.random
+
+
+def get_plugin_manager() -> pluggy.PluginManager:
+    pm = pluggy.PluginManager("omnisolver-simple")
+    pm.add_hookspecs(simple_sampler)
+    pm.load_setuptools_entrypoints("omnisolver-simple")
+    pm.register(omnisolver.random)
+    return pm
 
 
 def get_all_adapters() -> Iterable[Adapter]:
     adapters = []
-    for entry in resource_listdir("omnisolver", "specifications"):
-        stream = resource_stream("omnisolver", f"specifications/{entry}")
+    pm = get_plugin_manager()
+    for package, path in pm.hook.get_specification_resource():
+        stream = resource_stream(package, path)
         adapters.append(SimpleAdapter(yaml.safe_load(stream)))
-
     return adapters
 
 
