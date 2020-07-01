@@ -10,9 +10,9 @@ import omnisolver.random
 
 
 def get_plugin_manager() -> pluggy.PluginManager:
-    pm = pluggy.PluginManager("omnisolver-simple")
+    pm = pluggy.PluginManager("omnisolver")
     pm.add_hookspecs(sampler_spec)
-    pm.load_setuptools_entrypoints("omnisolver-simple")
+    pm.load_setuptools_entrypoints("omnisolver")
     pm.register(omnisolver.random)
     return pm
 
