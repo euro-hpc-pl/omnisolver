@@ -2,8 +2,8 @@
 from typing import Tuple
 import pluggy
 
-hook_spec = pluggy.HookspecMarker("omnisolver-simple")]
+simple_sampler = pluggy.HookspecMarker("omnisolver-simple")]
 
-@hook_spec
+@simple_sampler
 def get_specification_resource() -> Tuple[str, str]:
     """Return package and resource name for solver's specification."""
