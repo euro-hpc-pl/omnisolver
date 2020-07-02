@@ -1,8 +1,13 @@
 """Setup script for omnisolver project."""
 from setuptools import setup, find_packages
 
+with open("README.md") as readme:
+    long_description = readme.read()
+
 
 setup(
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     name="omnisolver",
     entry_points={
         "console_scripts": ["omnisolver=omnisolver.cmd:main"],
