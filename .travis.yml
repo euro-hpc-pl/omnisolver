@@ -1,0 +1,19 @@
+language: python
+python:
+- '3.6'
+- '3.7'
+- '3.8'
+install:
+- pip install .
+- pip install codecov
+script:
+- coverage run setup.py pytest
+after_success:
+- codecov
+deploy:
+  provider: pypi
+  username: "__token__"
+  password:
+    secure: KOWiB/nVn6/gUxsj6eH0HxsBCXt/W6Xuz5vxKKOcNshk0TuibMO6gVru3R638UJkYzLkM31ipk9zWytn76Hmwx1kY7WRaDNhCN/AcsABqHnnOgpkxudm+3rrJtFf01r+HXVMkkp9OGPq9mmALTHyuM7f+21U1Y0PHY0cTo1/DxzvnTWoi4thh26OG7vAio23V3fftEWb584gBRzRnbC75thJgo1VlLZsZm+uSb4P5VD1MHMUnF8ZbqvNEfOq8/mossgWKfz5TuuzOqXveq2RBk509Rpjwnwnlv4jloAKPYcEdW74m4Gvlmkd9EjGONaQTz2cCcxcNT86yiLs3V/G8FQVRt3DPFu3oZTolT2IFRJp+V32Khp1EtxYxN37LV0G/knus+maNHeFdkokeTR/VkkVwtyV2SPmZIgBvLmGLADmAR1TydTmSLOLH7DNRNdpt+hPNGuQWYyRdNq/+ZTJ0aAf1urdNRd4oEO8iFenMpSQiz/XgZ8gadcLG36BRe5tIQwl1SKDLA5kCheog2prZtCS9io93ya1ImjBte/L4MnVtyrJxJrFXQlDAybstSHZ7guMdknfToiUNMpwPHPpiJcI9XxPpqqhwWIrR925QABJ0Xzf/kMxrc++zH3w1ZxfiE+1vZvdLFoQKmFNdGyhcrEJ+KEL6+ojaEmQ3rXKkzo=
+  on:
+    tags: true
