@@ -2,4 +2,4 @@
 
 # Omnisolver
 
-*Attention*: this package is still work in progress. Please comeback once initial version is released.
+*Attention*: this package is still work in progress. Please come back once initial version is released.
