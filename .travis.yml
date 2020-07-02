@@ -4,6 +4,7 @@ python:
 - '3.7'
 - '3.8'
 install:
+- pip install pep517
 - pip install .
 - pip install codecov
 script:
