@@ -1,5 +1,5 @@
 """Setup script for omnisolver project."""
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 with open("README.md") as readme:
     long_description = readme.read()
@@ -15,6 +15,6 @@ setup(
     },
     install_requires=["dimod", "numpy>=1.17.0", "pluggy", "typing_extensions", "pyaml", "pandas"],
     tests_require=["pytest"],
-    packages=find_packages(exclude=["tests"]),
+    packages=find_namespace_packages(exclude=["tests"]),
     package_data={"omnisolver.random": ["random.yml"]},
 )
