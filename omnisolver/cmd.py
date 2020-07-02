@@ -5,15 +5,13 @@ from pkg_resources import resource_stream
 import pluggy
 import yaml
 from omnisolver.adapters import Adapter, SimpleAdapter
-from omnisolver.plugin.hookspecs import sampler_spec
-import omnisolver.random
+from omnisolver.plugin import hookspecs
 
 
 def get_plugin_manager() -> pluggy.PluginManager:
     pm = pluggy.PluginManager("omnisolver")
-    pm.add_hookspecs(sampler_spec)
+    pm.add_hookspecs(hookspecs)
     pm.load_setuptools_entrypoints("omnisolver")
-    pm.register(omnisolver.random)
     return pm
 
 
