@@ -36,9 +36,7 @@ class SimpleAdapter(Adapter):
             raise ValueError("Unknown version of specification file.")
         self.sample_args_spec = specification["sample_args"]
         self.init_args_spec = specification["init_args"]
-        self.module_path, self.class_name = specification["sampler_class"].rsplit(
-            ".", 1
-        )
+        self.module_path, self.class_name = specification["sampler_class"].rsplit(".", 1)
         self.parser_name = specification["parser_name"]
         self.description = specification["description"]
 
@@ -64,9 +62,7 @@ class SimpleAdapter(Adapter):
     def add_argparse_subparser(
         self, root_group: argparse._SubParsersAction, parent: argparse.ArgumentParser
     ):
-        parser = root_group.add_parser(
-            self.parser_name, parents=[parent], add_help=False
-        )
+        parser = root_group.add_parser(self.parser_name, parents=[parent], add_help=False)
 
         for arg_spec in self.sample_args_spec:
             self._add_argument(parser, arg_spec)
@@ -79,9 +75,7 @@ class SimpleAdapter(Adapter):
     def _add_argument(self, parser, arg_spec):
         if "action" in arg_spec:
             parser.add_argument(
-                f"--{arg_spec['name']}",
-                help=arg_spec["help"],
-                action=arg_spec["action"],
+                f"--{arg_spec['name']}", help=arg_spec["help"], action=arg_spec["action"]
             )
         elif "default" in arg_spec:
             parser.add_argument(
@@ -91,9 +85,7 @@ class SimpleAdapter(Adapter):
                 default=arg_spec["default"],
             )
         else:
-            raise NotImplemented(
-                "Argument spec must contain one of 'default' or 'action'"
-            )
+            raise NotImplemented("Argument spec must contain one of 'default' or 'action'")
 
     def sample(self, cmd_args) -> dimod.SampleSet:
         sampler = self.create_sampler(cmd_args)

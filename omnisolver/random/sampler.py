@@ -23,9 +23,7 @@ class RandomSampler(dimod.Sampler):
         samples = [self.get_random_sample(bqm) for _ in range(num_reads)]
         energies = [bqm.energy(sample) for sample in samples]
 
-        return dimod.SampleSet.from_samples(
-            samples, energy=energies, vartype=bqm.vartype
-        )
+        return dimod.SampleSet.from_samples(samples, energy=energies, vartype=bqm.vartype)
 
     @property
     def properties(self):

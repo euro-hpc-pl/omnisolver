@@ -7,11 +7,11 @@ with open("README.md") as readme:
 
 setup(
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     name="omnisolver",
     entry_points={
         "console_scripts": ["omnisolver=omnisolver.cmd:main"],
-        "omnisolver": ["random = omnisolver.random"]
+        "omnisolver": ["random = omnisolver.random"],
     },
     setup_requires=["setuptools_scm"],
     install_requires=["dimod", "numpy>=1.17.0", "pluggy", "typing_extensions", "pyaml", "pandas"],
