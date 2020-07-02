@@ -13,6 +13,7 @@ setup(
         "console_scripts": ["omnisolver=omnisolver.cmd:main"],
         "omnisolver": ["random = omnisolver.random"]
     },
+    setup_requires=["setuptools_scm"],
     install_requires=["dimod", "numpy>=1.17.0", "pluggy", "typing_extensions", "pyaml", "pandas"],
     tests_require=["pytest"],
     packages=find_namespace_packages(exclude=["tests"]),
