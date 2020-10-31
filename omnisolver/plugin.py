@@ -1,11 +1,11 @@
 """Hook specifications for omnisolver."""
 import argparse
 import inspect
-from typing import Tuple, NamedTuple, Callable, Dict, Any
+from typing import NamedTuple, Callable, Dict, Any
 import dimod
 import pluggy
 
-sampler_spec = pluggy.HookspecMarker("omnisolver")
+plugin = pluggy.HookspecMarker("omnisolver")
 
 
 class Plugin(NamedTuple):
@@ -13,9 +13,10 @@ class Plugin(NamedTuple):
     create_solver: Callable[..., dimod.Sampler]
     populate_parser: Callable[[argparse.ArgumentParser], None]
 
-@sampler_spec
-def get_specification_resource() -> Tuple[str, str]:
-    """Return package and resource name for solver's specification."""
+
+@plugin
+def get_plugin() -> Plugin:
+    """Hook for defining plugin instances."""
 
 
 def filter_namespace_by_signature(
@@ -42,7 +43,7 @@ def call_func_with_args_from_namespace(func: Callable, namespace: argparse.Names
     :param func: function to be called.
     :param namespace: namespace from which arguments should be taken.
 
-    :returns: result obtained by calling funct. Equivalent to func(**vars(namespace))
+    :returns: result obtained by calling func. Equivalent to func(**vars(namespace))
      modulo the filtering described above.
      """
     return func(**filter_namespace_by_signature(namespace, inspect.signature(func)))
