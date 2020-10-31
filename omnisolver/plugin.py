@@ -8,6 +8,11 @@ import pluggy
 sampler_spec = pluggy.HookspecMarker("omnisolver")
 
 
+class Plugin(NamedTuple):
+    name: str
+    create_solver: Callable[..., dimod.Sampler]
+    populate_parser: Callable[[argparse.ArgumentParser], None]
+
 @sampler_spec
 def get_specification_resource() -> Tuple[str, str]:
     """Return package and resource name for solver's specification."""
