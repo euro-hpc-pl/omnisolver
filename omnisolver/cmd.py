@@ -1,27 +1,22 @@
 """Command line interface for omnisolver."""
 import argparse
-from typing import Iterable
-from pkg_resources import resource_stream
+from typing import Dict
 import pluggy
-import yaml
-from omnisolver.adapters import Adapter, SimpleAdapter
-from omnisolver import plugin
+import omnisolver.plugin
+from omnisolver.serialization import bqm_from_coo
 
 
 def get_plugin_manager() -> pluggy.PluginManager:
+    """Construct plugin manager aware of all defined plugins for omnisolver."""
     pm = pluggy.PluginManager("omnisolver")
-    pm.add_hookspecs(plugin)
+    pm.add_hookspecs(omnisolver.plugin)
     pm.load_setuptools_entrypoints("omnisolver")
     return pm
 
 
-def get_all_adapters() -> Iterable[Adapter]:
-    adapters = []
-    pm = get_plugin_manager()
-    for package, path in pm.hook.get_specification_resource():
-        stream = resource_stream(package, path)
-        adapters.append(SimpleAdapter(yaml.safe_load(stream)))
-    return adapters
+def get_all_plugins(plugin_manager: pluggy.PluginManager) -> Dict[str, omnisolver.plugin.Plugin]:
+    """Get all plugins defined for omnisolver."""
+    return {plugin.name: plugin for plugin in plugin_manager.hook.get_plugin()}
 
 
 def main():
@@ -46,20 +41,22 @@ def main():
 
     solver_commands = root_parser.add_subparsers(title="Solvers")
 
-    adapters = get_all_adapters()
-    for adapter in adapters:
-        if adapter.is_available():
-            adapter.add_argparse_subparser(solver_commands, parent=common_parser)
+    all_plugins = get_all_plugins(get_plugin_manager())
+
+    for plugin in all_plugins.values():
+        sub_parser = solver_commands.add_parser(plugin.name, dest="solver")
+        plugin.populate_parser(sub_parser)
 
     args = root_parser.parse_args()
 
-    if not hasattr(args, "sample"):
-        print("Missing argument. You need to supply solver name.")
-        root_parser.print_usage()
-        exit(1)
+    chosen_plugin = all_plugins[args.solver]
+    sampler = omnisolver.plugin.call_func_with_args_from_namespace(
+        chosen_plugin.create_solver, args
+    )
 
-    result = args.sample(args)
+    args.bqm = bqm_from_coo(args.input, vartype=args.vartype)
 
+    result = omnisolver.plugin.call_func_with_args_from_namespace(sampler.sample, args)
     result.to_pandas_dataframe().to_csv(args.output)
 
 
