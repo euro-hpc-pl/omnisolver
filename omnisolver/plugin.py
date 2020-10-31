@@ -1,9 +1,11 @@
 """Hook specifications for omnisolver."""
 import argparse
 import inspect
-from typing import NamedTuple, Callable, Dict, Any
+from typing import NamedTuple, Callable, Dict, Any, TypeVar
 import dimod
 import pluggy
+
+T = TypeVar("T")
 
 plugin = pluggy.HookspecMarker("omnisolver")
 
@@ -34,7 +36,7 @@ def filter_namespace_by_signature(
     return {key: value for key, value in vars(namespace).items() if key in signature.parameters}
 
 
-def call_func_with_args_from_namespace(func: Callable, namespace: argparse.Namespace):
+def call_func_with_args_from_namespace(func: Callable[..., T], namespace: argparse.Namespace) -> T:
     """Call a function, supplying arguments from a namespace.
 
     Arguments taken from namespace are filtered in such a way that only named parameters
