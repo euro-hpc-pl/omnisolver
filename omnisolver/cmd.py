@@ -8,10 +8,10 @@ from omnisolver.serialization import bqm_from_coo
 
 def get_plugin_manager() -> pluggy.PluginManager:
     """Construct plugin manager aware of all defined plugins for omnisolver."""
-    pm = pluggy.PluginManager("omnisolver")
-    pm.add_hookspecs(omnisolver.plugin)
-    pm.load_setuptools_entrypoints("omnisolver")
-    return pm
+    manager = pluggy.PluginManager("omnisolver")
+    manager.add_hookspecs(omnisolver.plugin)
+    manager.load_setuptools_entrypoints("omnisolver")
+    return manager
 
 
 def get_all_plugins(plugin_manager: pluggy.PluginManager) -> Dict[str, omnisolver.plugin.Plugin]:
@@ -44,7 +44,9 @@ def main():
     all_plugins = get_all_plugins(get_plugin_manager())
 
     for plugin in all_plugins.values():
-        sub_parser = solver_commands.add_parser(plugin.name, parents=[common_parser], add_help=False)
+        sub_parser = solver_commands.add_parser(
+            plugin.name, parents=[common_parser], add_help=False
+        )
         plugin.populate_parser(sub_parser)
 
     args = root_parser.parse_args()

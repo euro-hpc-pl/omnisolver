@@ -10,7 +10,8 @@ from omnisolver.plugin import (
     call_func_with_args_from_namespace,
     filter_namespace_by_signature,
     add_argument,
-    import_object, plugin_from_specification,
+    import_object,
+    plugin_from_specification,
 )
 
 
@@ -125,15 +126,10 @@ class TestCreatingPluginFromSchema:
                 "name": "prob",
                 "help": "probability of choosing 1 (default 0.5)",
                 "type": "float",
-                "default": 0.5
+                "default": 0.5,
             },
-            {
-                "name": "num_reads",
-                "help": "number of samples to draw",
-                "type": "int",
-                "default": 1
-            }
-        ]
+            {"name": "num_reads", "help": "number of samples to draw", "type": "int", "default": 1},
+        ],
     }
 
     def test_raises_if_schema_version_is_different_than_1(self):
@@ -154,9 +150,7 @@ class TestCreatingPluginFromSchema:
         loader.assert_called_once_with("omnisolver.random.sampler")
         assert plugin.create_solver == loader.return_value.RandomSampler
 
-    def test_gives_plugin_with_name_taken_from_specification(
-        self, mocker
-    ):
+    def test_gives_plugin_with_name_taken_from_specification(self, mocker):
         loader = mocker.create_autospec(importlib.import_module)
         plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
 
@@ -171,18 +165,15 @@ class TestCreatingPluginFromSchema:
 
         plugin.populate_parser(parser)
 
-        parser.add_argument.assert_has_calls([
-            mocker.call(
-                "--prob",
-                help="probability of choosing 1 (default 0.5)",
-                type=float,
-                default=0.5
-            ),
-            mocker.call(
-                "--num_reads",
-                help="number of samples to draw",
-                type=int,
-                default=1
-            )],
-            any_order=False
+        parser.add_argument.assert_has_calls(
+            [
+                mocker.call(
+                    "--prob",
+                    help="probability of choosing 1 (default 0.5)",
+                    type=float,
+                    default=0.5,
+                ),
+                mocker.call("--num_reads", help="number of samples to draw", type=int, default=1),
+            ],
+            any_order=False,
         )

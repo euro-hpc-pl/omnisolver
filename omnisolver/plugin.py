@@ -31,7 +31,7 @@ def plugin_from_specification(specification, loader=importlib.import_module) -> 
     return Plugin(
         name=specification["name"],
         create_solver=import_object(specification["sampler_class"], loader),
-        populate_parser=_populate_parser
+        populate_parser=_populate_parser,
     )
 
 
