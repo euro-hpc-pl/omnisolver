@@ -39,7 +39,7 @@ def main():
         "--vartype", help="Variable type", choices=["SPIN", "BINARY"], default="BINARY"
     )
 
-    solver_commands = root_parser.add_subparsers(title="Solvers")
+    solver_commands = root_parser.add_subparsers(title="Solvers", dest="solver")
 
     all_plugins = get_all_plugins(get_plugin_manager())
 
