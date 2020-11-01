@@ -1,7 +1,10 @@
 """Test cases for omnisolver's plugin system."""
 import argparse
 import inspect
-from omnisolver.plugin import call_func_with_args_from_namespace, filter_namespace_by_signature
+
+import pytest
+
+from omnisolver.plugin import call_func_with_args_from_namespace, filter_namespace_by_signature, add_argument
 
 
 def test_filtering_namespace_gives_intersection_of_signature_args_and_namespace_attributes():
@@ -51,3 +54,57 @@ class TestCallingFunctionWithArgsFromNamespace:
             pass
 
         call_func_with_args_from_namespace(_func, argparse.Namespace(x=1, y=2, z=3))
+
+
+@pytest.mark.parametrize(
+    "specification, expected_name, expected_kwargs",
+    [
+        (
+            {
+                "name": "prob",
+                "help": "probability of choosing 1 (default 0.5)",
+                "type": "float",
+                "default": 0.5
+            },
+            "--prob",
+            {
+                "help": "probability of choosing 1 (default 0.5)",
+                "type": float,
+                "default": 0.5
+            }
+        ),
+        (
+            {
+                "name": "num_reads",
+                "help": "number of samples to draw",
+                "type": "int",
+                "default": 1
+            },
+            "--num_reads",
+            {
+                "help": "number of samples to draw",
+                "type": int,
+                "default": 1
+            }
+        ),
+        (
+            {
+                "name": "some_flag",
+                "help": "sets some flag",
+                "action": "store_true",
+            },
+            "--some_flag",
+            {
+                "help": "sets some flag",
+                "action": "store_true",
+            }
+        )
+    ]
+)
+def test_adding_argument_from_specification_to_parser_populates_all_fields_present_in_spec(
+    specification, expected_name, expected_kwargs, mocker
+):
+    parser = mocker.create_autospec(argparse.ArgumentParser)
+    add_argument(parser, specification)
+
+    parser.add_argument.assert_called_once_with(expected_name, **expected_kwargs)

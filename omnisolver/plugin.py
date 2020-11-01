@@ -1,5 +1,6 @@
 """Hook specifications for omnisolver."""
 import argparse
+import copy
 import inspect
 from typing import NamedTuple, Callable, Dict, Any, TypeVar
 import dimod
@@ -49,3 +50,14 @@ def call_func_with_args_from_namespace(func: Callable[..., T], namespace: argpar
      modulo the filtering described above.
      """
     return func(**filter_namespace_by_signature(namespace, inspect.signature(func)))
+
+
+TYPE_MAP = {"str": str, "int": int, "float": float}
+
+def add_argument(parser: argparse.ArgumentParser, specification: Dict[str, Any]):
+    """Given specification of the argument, add it to parser."""
+    specification = copy.deepcopy(specification)
+    arg_name = f"--{specification.pop('name')}"
+    if "type" in specification:
+        specification["type"] = TYPE_MAP.get(specification["type"], specification["type"])
+    parser.add_argument(arg_name, **specification)
