@@ -17,6 +17,7 @@ class RandomSampler(dimod.Sampler):
         self.prob = 0.5
 
     def get_random_sample(self, bqm):
+        """Get random assignment of variables in given BQM."""
         get_random_value = partial(self.variable_samplers[bqm.vartype], prob=self.prob)
         return {variable: get_random_value() for variable in bqm.variables}
 

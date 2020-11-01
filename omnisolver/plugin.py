@@ -15,12 +15,25 @@ plugin_impl = pluggy.HookimplMarker("omnisolver")
 
 
 class Plugin(NamedTuple):
+    """Namedtuple storing all information needed from plugin."""
     name: str
     create_solver: Callable[..., dimod.Sampler]
     populate_parser: Callable[[argparse.ArgumentParser], None]
 
 
 def plugin_from_specification(specification, loader=importlib.import_module) -> Plugin:
+    """Create Plugin constructed from given specification.
+
+    :param specification: dictionary specifying properties of the solver.
+     For reference, see random.yml in omnisolver.random package.
+    :param loader: function used for loading modules. Usually no need to override this.
+
+    :returns: a instance of Plugin with the following properties:
+     - plugin.name is taken from "name" in specification
+     - create_solver of a class pointed to by specification["sampler_class"]
+     - populate_parser acts in such a way, that it adds to the target parser all arguments
+       present in specification["args"]
+    """
     schema_version = specification["schema_version"]
     if schema_version != 1:
         raise ValueError("Unknown schema version: 2")
