@@ -44,7 +44,7 @@ def main():
     all_plugins = get_all_plugins(get_plugin_manager())
 
     for plugin in all_plugins.values():
-        sub_parser = solver_commands.add_parser(plugin.name, dest="solver")
+        sub_parser = solver_commands.add_parser(plugin.name, parents=[common_parser], add_help=False)
         plugin.populate_parser(sub_parser)
 
     args = root_parser.parse_args()
