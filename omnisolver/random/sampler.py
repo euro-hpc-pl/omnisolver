@@ -14,7 +14,7 @@ class RandomSampler(dimod.Sampler):
     }
 
     def __init__(self, prob):
-        self.prob = 0.5
+        self.prob = prob
 
     def get_random_sample(self, bqm):
         """Get random assignment of variables in given BQM."""
