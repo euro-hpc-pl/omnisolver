@@ -18,6 +18,22 @@ class Plugin(NamedTuple):
     populate_parser: Callable[[argparse.ArgumentParser], None]
 
 
+def plugin_from_specification(specification, loader=importlib.import_module) -> Plugin:
+    schema_version = specification["schema_version"]
+    if schema_version != 1:
+        raise ValueError("Unknown schema version: 2")
+
+    def _populate_parser(parser: argparse.ArgumentParser) -> None:
+        for arg in specification["args"]:
+            add_argument(parser, arg)
+
+    return Plugin(
+        name=specification["name"],
+        create_solver=import_object(specification["sampler_class"], loader),
+        populate_parser=_populate_parser
+    )
+
+
 @plugin
 def get_plugin() -> Plugin:
     """Hook for defining plugin instances."""

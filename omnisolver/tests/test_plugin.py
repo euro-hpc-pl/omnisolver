@@ -1,5 +1,6 @@
 """Test cases for omnisolver's plugin system."""
 import argparse
+import copy
 import importlib
 import inspect
 
@@ -9,7 +10,7 @@ from omnisolver.plugin import (
     call_func_with_args_from_namespace,
     filter_namespace_by_signature,
     add_argument,
-    import_object,
+    import_object, plugin_from_specification,
 )
 
 
@@ -110,3 +111,78 @@ def test_when_importing_object_by_dotted_path_the_object_is_retrieved_from_impor
     result = import_object("omnisolver.pkg.my_sampler.CustomSampler", loader)
 
     assert result == loader.return_value.CustomSampler
+
+
+class TestCreatingPluginFromSchema:
+
+    CORRECT_SPECIFICATION = {
+        "schema_version": 1,
+        "name": "random",
+        "sampler_class": "omnisolver.random.sampler.RandomSampler",
+        "description": "A purely random solver",
+        "args": [
+            {
+                "name": "prob",
+                "help": "probability of choosing 1 (default 0.5)",
+                "type": "float",
+                "default": 0.5
+            },
+            {
+                "name": "num_reads",
+                "help": "number of samples to draw",
+                "type": "int",
+                "default": 1
+            }
+        ]
+    }
+
+    def test_raises_if_schema_version_is_different_than_1(self):
+        specification = copy.deepcopy(self.CORRECT_SPECIFICATION)
+        specification["schema_version"] = 2
+
+        with pytest.raises(ValueError) as error_info:
+            plugin_from_specification(specification)
+
+        assert str(error_info.value) == "Unknown schema version: 2"
+
+    def test_gives_plugin_with_solver_factory_equal_to_solver_class_from_specification(
+        self, mocker
+    ):
+        loader = mocker.create_autospec(importlib.import_module)
+        plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
+
+        loader.assert_called_once_with("omnisolver.random.sampler")
+        assert plugin.create_solver == loader.return_value.RandomSampler
+
+    def test_gives_plugin_with_name_taken_from_specification(
+        self, mocker
+    ):
+        loader = mocker.create_autospec(importlib.import_module)
+        plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
+
+        assert plugin.name == "random"
+
+    def test_gives_plugin_with_populate_parser_that_adds_all_arguments_from_specification(
+        self, mocker
+    ):
+        loader = mocker.create_autospec(importlib.import_module)
+        parser = mocker.create_autospec(argparse.ArgumentParser)
+        plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
+
+        plugin.populate_parser(parser)
+
+        parser.add_argument.assert_has_calls([
+            mocker.call(
+                "--prob",
+                help="probability of choosing 1 (default 0.5)",
+                type=float,
+                default=0.5
+            ),
+            mocker.call(
+                "--num_reads",
+                help="number of samples to draw",
+                type=int,
+                default=1
+            )],
+            any_order=False
+        )
