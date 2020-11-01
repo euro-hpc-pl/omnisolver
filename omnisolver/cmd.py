@@ -24,8 +24,8 @@ def main():
     root_parser = argparse.ArgumentParser()
     common_parser = argparse.ArgumentParser()
     common_parser.add_argument(
-        "--input",
-        help="Path of the input BQM file in BQM format. If not specified, stdin is used.",
+        "input",
+        help="Path of the input BQM file in COO format. If not specified, stdin is used.",
         type=argparse.FileType("r"),
         default="-",
     )
