@@ -1,6 +1,7 @@
 """Hook specifications for omnisolver."""
 import argparse
 import copy
+import importlib
 import inspect
 from typing import NamedTuple, Callable, Dict, Any, TypeVar
 import dimod
@@ -61,3 +62,16 @@ def add_argument(parser: argparse.ArgumentParser, specification: Dict[str, Any])
     if "type" in specification:
         specification["type"] = TYPE_MAP.get(specification["type"], specification["type"])
     parser.add_argument(arg_name, **specification)
+
+
+def import_object(dotted_path: str, loader=importlib.import_module):
+    """Imports object specified by its full dotted_path.
+
+    :param dotted_path: full path of the object, e.g. omnisolver.random.sampler.RandomSampler.
+    :param loader: function used to load module from the given path.
+     Usually you don't need to specify that, this is here for testability purposes.
+    :returns: whatever dotted path points to.
+    """
+    module_path, obj_name = dotted_path.rsplit(".", 1)
+    module = loader(module_path)
+    return getattr(module, obj_name)

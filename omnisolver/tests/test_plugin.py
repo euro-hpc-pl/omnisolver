@@ -1,10 +1,12 @@
 """Test cases for omnisolver's plugin system."""
 import argparse
+import importlib
 import inspect
 
 import pytest
 
-from omnisolver.plugin import call_func_with_args_from_namespace, filter_namespace_by_signature, add_argument
+from omnisolver.plugin import call_func_with_args_from_namespace, filter_namespace_by_signature, add_argument, \
+    import_object
 
 
 def test_filtering_namespace_gives_intersection_of_signature_args_and_namespace_attributes():
@@ -108,3 +110,20 @@ def test_adding_argument_from_specification_to_parser_populates_all_fields_prese
     add_argument(parser, specification)
 
     parser.add_argument.assert_called_once_with(expected_name, **expected_kwargs)
+
+
+def test_when_importing_object_by_dotted_path_loader_is_called_with_modules_path(mocker):
+    loader = mocker.create_autospec(importlib.import_module)
+
+    import_object("omnisolver.pkg.my_sampler.CustomSampler", loader)
+
+    loader.assert_called_once_with("omnisolver.pkg.my_sampler")
+
+
+def test_when_importing_object_by_dotted_path_the_object_is_retrieved_from_imported_module(mocker):
+    loader = mocker.create_autospec(importlib.import_module)
+    loader.return_value.CustomSampler = type("CustomSampler", tuple(), {})
+
+    result = import_object("omnisolver.pkg.my_sampler.CustomSampler", loader)
+
+    assert result == loader.return_value.CustomSampler
