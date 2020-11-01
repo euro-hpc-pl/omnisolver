@@ -2,12 +2,13 @@
 
 This also serves as a reference implementation of omnisolver plugins.
 """
-from typing import Tuple
+from pkg_resources import resource_stream
+from omnisolver.plugin import plugin, Plugin, plugin_from_specification
+from yaml import safe_load
 
-from omnisolver.plugin import sampler_spec_impl
 
-
-@sampler_spec_impl
-def get_specification_resource() -> Tuple[str, str]:
+@plugin
+def get_random_sampler_plugin() -> Plugin:
     """Get package name and resource path."""
-    return "omnisolver.random", "random.yml"
+    specification = safe_load(resource_stream("omnisolver.random", "random.yml"))
+    return plugin_from_specification(specification)
