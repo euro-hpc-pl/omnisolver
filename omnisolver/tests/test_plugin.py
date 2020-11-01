@@ -17,7 +17,7 @@ from omnisolver.plugin import (
 
 def test_filtering_namespace_gives_intersection_of_signature_args_and_namespace_attributes():
     def function(data, method, precision):
-        pass
+        return data, method, precision
 
     signature = inspect.signature(function)
     namespace = argparse.Namespace(data="some-data", method="BFGS", name="my-solver")
@@ -29,7 +29,7 @@ def test_filtering_namespace_gives_intersection_of_signature_args_and_namespace_
 class TestCallingFunctionWithArgsFromNamespace:
     def test_passes_all_arguments_defined_in_namespace(self, mocker):
         def _func(x, y, z=0.0):
-            pass
+            return x, y, z
 
         func = mocker.create_autospec(_func)
 
@@ -39,7 +39,7 @@ class TestCallingFunctionWithArgsFromNamespace:
 
     def test_passes_through_return_value_of_called_function(self, mocker):
         def _solve(instance, n_args, beta):
-            pass
+            return instance, n_args, beta
 
         solve = mocker.create_autospec(_solve)
 
@@ -51,7 +51,7 @@ class TestCallingFunctionWithArgsFromNamespace:
 
     def test_succeeds_even_if_additional_arguments_are_present_in_namespace(self):
         def _func(x, y):
-            pass
+            return x, y
 
         call_func_with_args_from_namespace(_func, argparse.Namespace(x=1, y=2, z=3))
 
