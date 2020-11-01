@@ -24,8 +24,7 @@ def get_plugin() -> Plugin:
 
 
 def filter_namespace_by_signature(
-    namespace: argparse.Namespace,
-    signature: inspect.Signature
+    namespace: argparse.Namespace, signature: inspect.Signature
 ) -> Dict[str, Any]:
     """Filter namespace, leaving only attribute corresponding to parameters of some callable.
 
@@ -49,11 +48,12 @@ def call_func_with_args_from_namespace(func: Callable[..., T], namespace: argpar
 
     :returns: result obtained by calling func. Equivalent to func(**vars(namespace))
      modulo the filtering described above.
-     """
+    """
     return func(**filter_namespace_by_signature(namespace, inspect.signature(func)))
 
 
 TYPE_MAP = {"str": str, "int": int, "float": float}
+
 
 def add_argument(parser: argparse.ArgumentParser, specification: Dict[str, Any]):
     """Given specification of the argument, add it to parser."""

@@ -5,8 +5,12 @@ import inspect
 
 import pytest
 
-from omnisolver.plugin import call_func_with_args_from_namespace, filter_namespace_by_signature, add_argument, \
-    import_object
+from omnisolver.plugin import (
+    call_func_with_args_from_namespace,
+    filter_namespace_by_signature,
+    add_argument,
+    import_object,
+)
 
 
 def test_filtering_namespace_gives_intersection_of_signature_args_and_namespace_attributes():
@@ -21,9 +25,7 @@ def test_filtering_namespace_gives_intersection_of_signature_args_and_namespace_
 
 
 class TestCallingFunctionWithArgsFromNamespace:
-
     def test_passes_all_arguments_defined_in_namespace(self, mocker):
-
         def _func(x, y, z=0.0):
             pass
 
@@ -40,18 +42,12 @@ class TestCallingFunctionWithArgsFromNamespace:
         solve = mocker.create_autospec(_solve)
 
         return_value = call_func_with_args_from_namespace(
-            solve,
-            argparse.Namespace(
-                instance=[(0, 1, 5.0), (2, 3, -1.5)],
-                n_args=100,
-                beta=1.0
-            )
+            solve, argparse.Namespace(instance=[(0, 1, 5.0), (2, 3, -1.5)], n_args=100, beta=1.0)
         )
 
         assert return_value == solve.return_value
 
     def test_succeeds_even_if_additional_arguments_are_present_in_namespace(self):
-
         def _func(x, y):
             pass
 
@@ -66,28 +62,15 @@ class TestCallingFunctionWithArgsFromNamespace:
                 "name": "prob",
                 "help": "probability of choosing 1 (default 0.5)",
                 "type": "float",
-                "default": 0.5
+                "default": 0.5,
             },
             "--prob",
-            {
-                "help": "probability of choosing 1 (default 0.5)",
-                "type": float,
-                "default": 0.5
-            }
+            {"help": "probability of choosing 1 (default 0.5)", "type": float, "default": 0.5},
         ),
         (
-            {
-                "name": "num_reads",
-                "help": "number of samples to draw",
-                "type": "int",
-                "default": 1
-            },
+            {"name": "num_reads", "help": "number of samples to draw", "type": "int", "default": 1},
             "--num_reads",
-            {
-                "help": "number of samples to draw",
-                "type": int,
-                "default": 1
-            }
+            {"help": "number of samples to draw", "type": int, "default": 1},
         ),
         (
             {
@@ -99,9 +82,9 @@ class TestCallingFunctionWithArgsFromNamespace:
             {
                 "help": "sets some flag",
                 "action": "store_true",
-            }
-        )
-    ]
+            },
+        ),
+    ],
 )
 def test_adding_argument_from_specification_to_parser_populates_all_fields_present_in_spec(
     specification, expected_name, expected_kwargs, mocker
