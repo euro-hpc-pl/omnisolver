@@ -14,6 +14,8 @@ from omnisolver.plugin import (
     plugin_from_specification,
 )
 
+# pylint: disable=C0115,C0116,R0201,C0103
+
 
 def test_filtering_namespace_gives_intersection_of_signature_args_and_namespace_attributes():
     def function(data, method, precision):
