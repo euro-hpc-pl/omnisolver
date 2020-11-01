@@ -9,7 +9,8 @@ import pluggy
 
 T = TypeVar("T")
 
-plugin = pluggy.HookspecMarker("omnisolver")
+plugin_spec = pluggy.HookspecMarker("omnisolver")
+plugin_impl = pluggy.HookimplMarker("omnisolver")
 
 
 class Plugin(NamedTuple):
@@ -34,7 +35,7 @@ def plugin_from_specification(specification, loader=importlib.import_module) -> 
     )
 
 
-@plugin
+@plugin_spec
 def get_plugin() -> Plugin:
     """Hook for defining plugin instances."""
 

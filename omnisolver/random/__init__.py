@@ -3,12 +3,12 @@
 This also serves as a reference implementation of omnisolver plugins.
 """
 from pkg_resources import resource_stream
-from omnisolver.plugin import plugin, Plugin, plugin_from_specification
+from omnisolver.plugin import plugin_impl, Plugin, plugin_from_specification
 from yaml import safe_load
 
 
-@plugin
-def get_random_sampler_plugin() -> Plugin:
+@plugin_impl
+def get_plugin() -> Plugin:
     """Get package name and resource path."""
     specification = safe_load(resource_stream("omnisolver.random", "random.yml"))
     return plugin_from_specification(specification)
