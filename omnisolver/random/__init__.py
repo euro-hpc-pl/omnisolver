@@ -3,8 +3,9 @@
 This also serves as a reference implementation of omnisolver plugins.
 """
 from pkg_resources import resource_stream
-from omnisolver.plugin import plugin_impl, Plugin, plugin_from_specification
 from yaml import safe_load
+
+from omnisolver.plugin import plugin_impl, Plugin, plugin_from_specification
 
 
 @plugin_impl

@@ -4,6 +4,7 @@ import copy
 import importlib
 import inspect
 from typing import NamedTuple, Callable, Dict, Any, TypeVar
+
 import dimod
 import pluggy
 

@@ -1,7 +1,9 @@
 """Command line interface for omnisolver."""
 import argparse
 from typing import Dict
+
 import pluggy
+
 import omnisolver.plugin
 from omnisolver.serialization import bqm_from_coo
 
