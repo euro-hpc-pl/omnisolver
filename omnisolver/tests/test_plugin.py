@@ -161,3 +161,9 @@ class TestCreatingPluginFromSchema:
         plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
 
         assert plugin.sample_args == ["num_reads"]
+
+    def test_gives_plugin_with_descriptions_taken_from_the_specification(self, mocker):
+        loader = mocker.create_autospec(importlib.import_module)
+        plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
+
+        assert plugin.description == "A purely random solver"

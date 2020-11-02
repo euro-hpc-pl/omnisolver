@@ -16,6 +16,7 @@ plugin_impl = pluggy.HookimplMarker("omnisolver")
 class Plugin(NamedTuple):
     """Namedtuple storing all information needed from plugin."""
     name: str
+    description: str
     create_sampler: Callable[..., dimod.Sampler]
     populate_parser: Callable[[argparse.ArgumentParser], None]
     init_args: Iterable[str]
@@ -48,6 +49,7 @@ def plugin_from_specification(specification, loader=importlib.import_module) -> 
 
     return Plugin(
         name=specification["name"],
+        description=specification["description"],
         create_sampler=import_object(specification["sampler_class"], loader),
         populate_parser=_populate_parser,
         init_args=[arg["name"] for arg in specification["init_args"]],
