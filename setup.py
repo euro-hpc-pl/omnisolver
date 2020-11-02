@@ -19,7 +19,7 @@ setup(
         "numpy==1.17.0",
         "pluggy==0.13.1",
         "PyYAML==5.3.1",
-        "pandas==1.1.4"
+        "pandas==1.1.4",
     ],
     tests_require=["pytest==6.1.2", "pytest-mock==3.3.1"],
     packages=find_namespace_packages(exclude=["tests"]),
