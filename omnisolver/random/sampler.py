@@ -6,7 +6,12 @@ import dimod
 
 
 class RandomSampler(dimod.Sampler):
-    """Implementation of simple random-sampler."""
+    """Implementation of simple random-sampler.
+
+    This sampler assigns randomly chosen value to each variable, either from
+    the set {0, 1} or the set {-1, 1}, depending on the vartype of BQM
+    being solved.
+    """
 
     variable_samplers = {
         dimod.vartypes.SPIN: lambda prob: int(random.random() > prob) * 2 - 1,
