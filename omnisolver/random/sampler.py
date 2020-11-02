@@ -6,7 +6,7 @@ import dimod
 
 
 class RandomSampler(dimod.Sampler):
-    """Implementatoin of simple random-sampler."""
+    """Implementation of simple random-sampler."""
 
     variable_samplers = {
         dimod.vartypes.SPIN: lambda prob: int(random.random() > prob) * 2 - 1,
@@ -21,7 +21,7 @@ class RandomSampler(dimod.Sampler):
         get_random_value = partial(self.variable_samplers[bqm.vartype], prob=self.prob)
         return {variable: get_random_value() for variable in bqm.variables}
 
-    def sample(self, bqm, num_reads=1, **parameters):
+    def sample(self, bqm, num_reads=1, **parameters):  # pylint: disable=W0221
         samples = [self.get_random_sample(bqm) for _ in range(num_reads)]
         energies = [bqm.energy(sample) for sample in samples]
 
