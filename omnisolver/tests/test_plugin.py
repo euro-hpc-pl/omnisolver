@@ -155,7 +155,7 @@ class TestCreatingPluginFromSchema:
         assert plugin.init_args == ["prob"]
 
     def test_gives_plugin_with_sample_args_set_to_all_names_present_in_specification_sample_args(
-            self, mocker
+        self, mocker
     ):
         loader = mocker.create_autospec(importlib.import_module)
         plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)

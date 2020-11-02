@@ -61,8 +61,7 @@ def main():
     bqm = bqm_from_coo(args.input, vartype=args.vartype)
 
     result = sampler.sample(
-        bqm,
-        **omnisolver.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args)
+        bqm, **omnisolver.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args)
     )
 
     result.to_pandas_dataframe().to_csv(args.output)
