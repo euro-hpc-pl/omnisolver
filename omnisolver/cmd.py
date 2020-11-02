@@ -54,13 +54,17 @@ def main():
     args = root_parser.parse_args()
 
     chosen_plugin = all_plugins[args.solver]
-    sampler = omnisolver.plugin.call_func_with_args_from_namespace(
-        chosen_plugin.create_solver, args
+    sampler = chosen_plugin.create_sampler(
+        **omnisolver.plugin.filter_namespace_by_iterable(args, chosen_plugin.init_args)
     )
 
-    args.bqm = bqm_from_coo(args.input, vartype=args.vartype)
+    bqm = bqm_from_coo(args.input, vartype=args.vartype)
 
-    result = omnisolver.plugin.call_func_with_args_from_namespace(sampler.sample, args)
+    result = sampler.sample(
+        bqm,
+        **omnisolver.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args)
+    )
+
     result.to_pandas_dataframe().to_csv(args.output)
 
 

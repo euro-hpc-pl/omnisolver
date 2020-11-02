@@ -2,13 +2,11 @@
 import argparse
 import copy
 import importlib
-import inspect
 
 import pytest
 
 from omnisolver.plugin import (
-    call_func_with_args_from_namespace,
-    filter_namespace_by_signature,
+    filter_namespace_by_iterable,
     add_argument,
     import_object,
     plugin_from_specification,
@@ -17,45 +15,11 @@ from omnisolver.plugin import (
 # pylint: disable=C0115,C0116,R0201,C0103
 
 
-def test_filtering_namespace_gives_intersection_of_signature_args_and_namespace_attributes():
-    def function(data, method, precision):
-        return data, method, precision
-
-    signature = inspect.signature(function)
+def test_filtering_namespace_by_iterable_extracts_only_attributes_with_names_from_that_iterable():
     namespace = argparse.Namespace(data="some-data", method="BFGS", name="my-solver")
-
+    attribute_filter = ["data", "method"]
     expected_dict = {"data": "some-data", "method": "BFGS"}
-    assert filter_namespace_by_signature(namespace, signature) == expected_dict
-
-
-class TestCallingFunctionWithArgsFromNamespace:
-    def test_passes_all_arguments_defined_in_namespace(self, mocker):
-        def _func(x, y, z=0.0):
-            return x, y, z
-
-        func = mocker.create_autospec(_func)
-
-        call_func_with_args_from_namespace(func, argparse.Namespace(x=5.0, y=20))
-
-        func.assert_called_once_with(x=5.0, y=20)
-
-    def test_passes_through_return_value_of_called_function(self, mocker):
-        def _solve(instance, n_args, beta):
-            return instance, n_args, beta
-
-        solve = mocker.create_autospec(_solve)
-
-        return_value = call_func_with_args_from_namespace(
-            solve, argparse.Namespace(instance=[(0, 1, 5.0), (2, 3, -1.5)], n_args=100, beta=1.0)
-        )
-
-        assert return_value == solve.return_value
-
-    def test_succeeds_even_if_additional_arguments_are_present_in_namespace(self):
-        def _func(x, y):
-            return x, y
-
-        call_func_with_args_from_namespace(_func, argparse.Namespace(x=1, y=2, z=3))
+    assert filter_namespace_by_iterable(namespace, attribute_filter) == expected_dict
 
 
 @pytest.mark.parametrize(
@@ -123,13 +87,15 @@ class TestCreatingPluginFromSchema:
         "name": "random",
         "sampler_class": "omnisolver.random.sampler.RandomSampler",
         "description": "A purely random solver",
-        "args": [
+        "init_args": [
             {
                 "name": "prob",
                 "help": "probability of choosing 1 (default 0.5)",
                 "type": "float",
                 "default": 0.5,
-            },
+            }
+        ],
+        "sample_args": [
             {"name": "num_reads", "help": "number of samples to draw", "type": "int", "default": 1},
         ],
     }
@@ -150,7 +116,7 @@ class TestCreatingPluginFromSchema:
         plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
 
         loader.assert_called_once_with("omnisolver.random.sampler")
-        assert plugin.create_solver == loader.return_value.RandomSampler
+        assert plugin.create_sampler == loader.return_value.RandomSampler
 
     def test_gives_plugin_with_name_taken_from_specification(self, mocker):
         loader = mocker.create_autospec(importlib.import_module)
@@ -179,3 +145,19 @@ class TestCreatingPluginFromSchema:
             ],
             any_order=False,
         )
+
+    def test_gives_plugin_with_init_args_set_to_all_names_present_in_specification_init_args(
+        self, mocker
+    ):
+        loader = mocker.create_autospec(importlib.import_module)
+        plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
+
+        assert plugin.init_args == ["prob"]
+
+    def test_gives_plugin_with_sample_args_set_to_all_names_present_in_specification_sample_args(
+            self, mocker
+    ):
+        loader = mocker.create_autospec(importlib.import_module)
+        plugin = plugin_from_specification(self.CORRECT_SPECIFICATION, loader=loader)
+
+        assert plugin.sample_args == ["num_reads"]

@@ -2,8 +2,7 @@
 import argparse
 import copy
 import importlib
-import inspect
-from typing import NamedTuple, Callable, Dict, Any, TypeVar
+from typing import NamedTuple, Callable, Dict, Any, TypeVar, Iterable
 
 import dimod
 import pluggy
@@ -17,8 +16,10 @@ plugin_impl = pluggy.HookimplMarker("omnisolver")
 class Plugin(NamedTuple):
     """Namedtuple storing all information needed from plugin."""
     name: str
-    create_solver: Callable[..., dimod.Sampler]
+    create_sampler: Callable[..., dimod.Sampler]
     populate_parser: Callable[[argparse.ArgumentParser], None]
+    init_args: Iterable[str]
+    sample_args: Iterable[str]
 
 
 def plugin_from_specification(specification, loader=importlib.import_module) -> Plugin:
@@ -39,13 +40,18 @@ def plugin_from_specification(specification, loader=importlib.import_module) -> 
         raise ValueError("Unknown schema version: 2")
 
     def _populate_parser(parser: argparse.ArgumentParser) -> None:
-        for arg in specification["args"]:
+        for arg in specification["init_args"]:
+            add_argument(parser, arg)
+
+        for arg in specification["sample_args"]:
             add_argument(parser, arg)
 
     return Plugin(
         name=specification["name"],
-        create_solver=import_object(specification["sampler_class"], loader),
+        create_sampler=import_object(specification["sampler_class"], loader),
         populate_parser=_populate_parser,
+        init_args=[arg["name"] for arg in specification["init_args"]],
+        sample_args=[arg["name"] for arg in specification["sample_args"]]
     )
 
 
@@ -54,33 +60,18 @@ def get_plugin() -> Plugin:
     """Hook for defining plugin instances."""
 
 
-def filter_namespace_by_signature(
-    namespace: argparse.Namespace, signature: inspect.Signature
+def filter_namespace_by_iterable(
+    namespace: argparse.Namespace, attribute_filter: Iterable[str]
 ) -> Dict[str, Any]:
-    """Filter namespace, leaving only attribute corresponding to parameters of some callable.
+    """Filter namespace, leaving only attribute present in given filter.
 
     :param namespace: namespace to be filtered.
-    :param signature: signature of the function.
+    :param attribute_filter: iterable of attribute names to be used as a filter.
 
-    :returns: a dictionary mapping attribute names of namespace to their values such that given key
-    exists in this dictionary if and only if there exists parameter in signature of the same name.
+    return dictionary containing mapping attribute name -> attribute value for every
+     attribute of a signature such that its name is in attribute_filter.
     """
-    return {key: value for key, value in vars(namespace).items() if key in signature.parameters}
-
-
-def call_func_with_args_from_namespace(func: Callable[..., T], namespace: argparse.Namespace) -> T:
-    """Call a function, supplying arguments from a namespace.
-
-    Arguments taken from namespace are filtered in such a way that only named parameters
-    of the function are passed (even if it is variadic, so it won't receive **kwargs).
-
-    :param func: function to be called.
-    :param namespace: namespace from which arguments should be taken.
-
-    :returns: result obtained by calling func. Equivalent to func(**vars(namespace))
-     modulo the filtering described above.
-    """
-    return func(**filter_namespace_by_signature(namespace, inspect.signature(func)))
+    return {key: value for key, value in vars(namespace).items() if key in attribute_filter}
 
 
 TYPE_MAP = {"str": str, "int": int, "float": float}
