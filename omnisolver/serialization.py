@@ -15,7 +15,7 @@ def bqm_from_coo(coo: Union[PathLike, TextIO], vartype="BINARY") -> BQM:
     data_frame = pd.read_csv(coo, names=["i", "j", "coefficient"], sep=" ")
     quadratic = {}
     linear = {}
-    print(data_frame.values.tolist())
+
     for i, j, coefficient in data_frame.itertuples(index=False):
         if i == j:
             linear[i] = coefficient
