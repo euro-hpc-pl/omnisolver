@@ -15,8 +15,8 @@ setup(
     },
     setup_requires=["setuptools-scm==4.1.2"],
     install_requires=[
-        "dimod==0.9.3",
-        "numpy==1.17.0",
+        "dimod==0.9.10",
+        "numpy==1.19.4",
         "pluggy==0.13.1",
         "PyYAML==5.3.1",
         "pandas==1.1.4",
