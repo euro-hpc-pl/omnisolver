@@ -1,5 +1,5 @@
 schema_version: 1
-parser_name: "random"
+name: "random"
 sampler_class: "omnisolver.random.sampler.RandomSampler"
 description: "A purely random solver"
 

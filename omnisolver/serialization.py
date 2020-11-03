@@ -1,8 +1,9 @@
 """Tools for serializing and deserializing BQms."""
-from typing import Union, TextIO
 from os import PathLike
-from dimod import BQM
+from typing import Union, TextIO
+
 import pandas as pd
+from dimod import BQM
 
 
 def bqm_from_coo(coo: Union[PathLike, TextIO], vartype="BINARY") -> BQM:
@@ -11,11 +12,11 @@ def bqm_from_coo(coo: Union[PathLike, TextIO], vartype="BINARY") -> BQM:
     This is intended as a replacement for dimod.serialization.coo.load,
     which sometimes handles integral coefficients poorly.
     """
-    df = pd.read_csv(coo, names=["i", "j", "coefficient"], sep=" ")
+    data_frame = pd.read_csv(coo, names=["i", "j", "coefficient"], sep=" ")
     quadratic = {}
     linear = {}
-    print(df.values.tolist())
-    for i, j, coefficient in df.itertuples(index=False):
+
+    for i, j, coefficient in data_frame.itertuples(index=False):
         if i == j:
             linear[i] = coefficient
         else:

@@ -1,11 +1,17 @@
 """Simple implementation of dummy random sampler."""
-import dimod
-from functools import partial
 import random
+from functools import partial
+
+import dimod
 
 
 class RandomSampler(dimod.Sampler):
-    """Implementatoin of simple random-sampler."""
+    """Implementation of simple random-sampler.
+
+    This sampler assigns randomly chosen value to each variable, either from
+    the set {0, 1} or the set {-1, 1}, depending on the vartype of BQM
+    being solved.
+    """
 
     variable_samplers = {
         dimod.vartypes.SPIN: lambda prob: int(random.random() > prob) * 2 - 1,
@@ -13,13 +19,14 @@ class RandomSampler(dimod.Sampler):
     }
 
     def __init__(self, prob):
-        self.prob = 0.5
+        self.prob = prob
 
     def get_random_sample(self, bqm):
+        """Get random assignment of variables in given BQM."""
         get_random_value = partial(self.variable_samplers[bqm.vartype], prob=self.prob)
         return {variable: get_random_value() for variable in bqm.variables}
 
-    def sample(self, bqm, num_reads=1):
+    def sample(self, bqm, num_reads=1, **parameters):  # pylint: disable=W0221
         samples = [self.get_random_sample(bqm) for _ in range(num_reads)]
         energies = [bqm.energy(sample) for sample in samples]
 

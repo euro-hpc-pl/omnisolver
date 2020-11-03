@@ -1,10 +1,14 @@
 """Test cases for omnisolver.serialization."""
+from io import StringIO
 from textwrap import dedent
 from typing import Any, Dict
-from dimod import vartypes
+
 import pytest
-from io import StringIO
+from dimod import vartypes
+
 from omnisolver.serialization import bqm_from_coo
+
+# pylint: disable=C0115,C0116,R0201,C0103
 
 
 def make_coo(string):
