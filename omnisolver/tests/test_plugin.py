@@ -6,8 +6,8 @@ import importlib
 import pytest
 
 from omnisolver.plugin import (
-    filter_namespace_by_iterable,
     add_argument,
+    filter_namespace_by_iterable,
     import_object,
     plugin_from_specification,
 )
@@ -71,7 +71,7 @@ def test_when_importing_object_by_dotted_path_loader_is_called_with_modules_path
     loader.assert_called_once_with("omnisolver.pkg.my_sampler")
 
 
-def test_when_importing_object_by_dotted_path_the_object_is_retrieved_from_imported_module(mocker):
+def test_importing_object_by_dotted_path_the_object_retrieves_it_from_imported_module(mocker):
     loader = mocker.create_autospec(importlib.import_module)
     loader.return_value.CustomSampler = type("CustomSampler", tuple(), {})
 
