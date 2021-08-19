@@ -12,8 +12,6 @@ from omnisolver.plugin import (
     plugin_from_specification,
 )
 
-# pylint: disable=C0115,C0116,R0201,C0103
-
 
 def test_filtering_namespace_by_iterable_extracts_only_attributes_with_names_from_that_iterable():
     namespace = argparse.Namespace(data="some-data", method="BFGS", name="my-solver")

@@ -8,8 +8,6 @@ from dimod import vartypes
 
 from omnisolver.serialization import bqm_from_coo
 
-# pylint: disable=C0115,C0116,R0201,C0103
-
 
 def make_coo(string):
     return StringIO(dedent(string).strip("\n"))

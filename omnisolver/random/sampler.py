@@ -26,7 +26,7 @@ class RandomSampler(dimod.Sampler):
         get_random_value = partial(self.variable_samplers[bqm.vartype], prob=self.prob)
         return {variable: get_random_value() for variable in bqm.variables}
 
-    def sample(self, bqm, num_reads=1, **parameters):  # pylint: disable=W0221
+    def sample(self, bqm, num_reads=1, **parameters):
         samples = [self.get_random_sample(bqm) for _ in range(num_reads)]
         energies = [bqm.energy(sample) for sample in samples]
 
