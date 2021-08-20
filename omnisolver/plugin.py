@@ -2,7 +2,7 @@
 import argparse
 import copy
 import importlib
-from typing import NamedTuple, Callable, Dict, Any, TypeVar, Iterable
+from typing import Any, Callable, Dict, Iterable, NamedTuple, TypeVar
 
 import dimod
 import pluggy

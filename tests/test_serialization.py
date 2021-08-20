@@ -8,8 +8,6 @@ from dimod import vartypes
 
 from omnisolver.serialization import bqm_from_coo
 
-# pylint: disable=C0115,C0116,R0201,C0103
-
 
 def make_coo(string):
     return StringIO(dedent(string).strip("\n"))
@@ -23,7 +21,8 @@ def sorted_quadratic(quadratic: Dict[Any, float]):
 def test_sets_correct_vartype(vartype):
     """BQM loaded from coo should have correct vartype."""
     coo = make_coo(
-        """0 1 2.5
+        """
+        0 1 2.5
         1 1 -3
         2 0 4
         4 3 -1.2

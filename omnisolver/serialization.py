@@ -1,6 +1,6 @@
 """Tools for serializing and deserializing BQms."""
 from os import PathLike
-from typing import Union, TextIO
+from typing import TextIO, Union
 
 import pandas as pd
 from dimod import BQM
