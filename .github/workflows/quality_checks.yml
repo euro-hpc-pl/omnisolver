@@ -21,7 +21,7 @@ jobs:
       - name: Run pytest
         run: pytest tests
       - name: Run quality checks
-        uses: ricardochaves/python-lint@v1.3.0
+        uses: ricardochaves/python-lint@v1.4.0
         with:
           python-root-list: "omnisolver"
           use-pylint: false
