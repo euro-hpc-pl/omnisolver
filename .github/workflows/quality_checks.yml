@@ -1,6 +1,6 @@
 name: Publish new version to PyPI
 
-on: [pull_request]
+on: [push]
 
 jobs:
   quality_cheks:
