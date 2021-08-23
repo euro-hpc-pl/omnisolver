@@ -31,6 +31,5 @@ jobs:
           use-black: true
           use-isort: true
           extra-flake8-options: --max-line-length=100
-          extra-black-options: --check
           extra-mypy-options: --ignore-missing-imports --namespace-packages
           extra-isort-options: --check-only --profile black
