@@ -3,7 +3,7 @@ name: Publish new version to PyPI
 on: [push]
 
 jobs:
-  quality_cheks:
+  run_tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -20,6 +20,13 @@ jobs:
           pip install .[test]
       - name: Run pytest
         run: pytest tests
+  run_quality_cheks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
       - name: Run quality checks
         uses: ricardochaves/python-lint@v1.4.0
         with:
