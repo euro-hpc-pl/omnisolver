@@ -19,7 +19,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install .[test]
       - name: Run pytest
-        run: pytest tests
+        run: pytest --cov=omnisolver tests
   run_quality_cheks:
     runs-on: ubuntu-latest
     steps:
