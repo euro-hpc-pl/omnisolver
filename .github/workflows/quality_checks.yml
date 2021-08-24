@@ -20,7 +20,9 @@ jobs:
           pip install .[test]
       - name: Run pytest
         run: |
+          pip install coveralls
           coverage run --source=omnisolver -m pytest tests
+          coveralls
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
         with:
