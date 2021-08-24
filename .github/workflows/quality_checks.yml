@@ -25,19 +25,6 @@ jobs:
           pip install coveralls
           coverage run --source=omnisolver -m pytest tests
           coveralls --debug
-      - name: Coveralls
-        uses: AndreMiras/coveralls-python-action@develop
-        with:
-          parallel: false
-          debug: true
-  coveralls_finish:
-    needs: run_tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: AndreMiras/coveralls-python-action@develop
-        with:
-          parallel-finished: true
   run_quality_cheks:
     runs-on: ubuntu-latest
     steps:
