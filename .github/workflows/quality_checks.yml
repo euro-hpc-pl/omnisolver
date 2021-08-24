@@ -1,4 +1,4 @@
-name: Publish new version to PyPI
+name: Run tests and other quality checks
 
 on: [push]
 
