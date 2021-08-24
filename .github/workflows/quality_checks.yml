@@ -24,7 +24,7 @@ jobs:
         run: |
           pip install coveralls
           coverage run --source=omnisolver -m pytest tests
-          coveralls --debug
+          coveralls debug
   run_quality_cheks:
     runs-on: ubuntu-latest
     steps:
