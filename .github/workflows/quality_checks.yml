@@ -24,7 +24,7 @@ jobs:
         run: |
           pip install coveralls
           coverage run --source=omnisolver -m pytest tests
-          coveralls
+          coveralls --debug
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
         with:
