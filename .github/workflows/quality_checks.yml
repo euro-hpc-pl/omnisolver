@@ -23,7 +23,7 @@ jobs:
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
         with:
-          parallel: true
+          parallel: false
           flag-name: Unit Tests
   coveralls_finish:
     needs: run_tests
