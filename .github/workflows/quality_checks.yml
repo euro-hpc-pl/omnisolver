@@ -25,6 +25,7 @@ jobs:
         with:
           parallel: false
           flag-name: Unit Tests
+          debug: true
   coveralls_finish:
     needs: run_tests
     runs-on: ubuntu-latest
