@@ -18,13 +18,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install .[test]
-      - name: Run pytest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pip install coveralls
-          coverage run --source=omnisolver -m pytest tests
-          coveralls  --service=github
+      - name: Run unittest and report coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          files: ./coverage1.xml,./coverage2.xml # optional
+          flags: unittests # optional
+          fail_ci_if_error: true
+
   run_quality_cheks:
     runs-on: ubuntu-latest
     steps:
