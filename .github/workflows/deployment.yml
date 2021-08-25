@@ -1,4 +1,4 @@
-name: Deploy to PyPI
+name: Build package
 
 on: [push]
 
