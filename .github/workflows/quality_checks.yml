@@ -1,0 +1,49 @@
+name: Run tests and other quality checks
+
+on: [pull_request]
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-versions: [3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies and the package
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[test]
+      - name: Run unit tests
+        run: pytest --cov=omnisolver --cov-report=xml
+      - name: Report coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          fail_ci_if_error: true
+
+  run_quality_cheks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - uses: actions/checkout@v2
+      - name: Run quality checks
+        uses: ricardochaves/python-lint@v1.4.0
+        with:
+          python-root-list: "omnisolver"
+          use-pylint: false
+          use-pycodestyle: false
+          use-flake8: true
+          use-mypy: true
+          use-black: true
+          use-isort: true
+          extra-flake8-options: --max-line-length=100
+          extra-mypy-options: --ignore-missing-imports --namespace-packages
+          extra-isort-options: --check-only --profile black
