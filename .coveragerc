@@ -1,0 +1,2 @@
+[report]
+omit = omnisolver/cmd.py
