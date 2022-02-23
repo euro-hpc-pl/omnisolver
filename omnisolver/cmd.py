@@ -65,7 +65,3 @@ def main():
     )
 
     result.to_pandas_dataframe().to_csv(args.output)
-
-
-if __name__ == "__main__":
-    main()
