@@ -64,4 +64,4 @@ def main(argv=None):
         bqm, **omnisolver.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args)
     )
 
-    result.to_pandas_dataframe().to_csv(args.output)
+    result.to_pandas_dataframe().to_csv(args.output, index=False)
