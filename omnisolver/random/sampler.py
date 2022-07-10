@@ -34,7 +34,7 @@ class RandomSampler(dimod.Sampler):
 
     @property
     def properties(self):
-        return dict()
+        return {"prob": self.prob}
 
     @property
     def parameters(self):

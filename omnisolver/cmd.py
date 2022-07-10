@@ -21,7 +21,7 @@ def get_all_plugins(plugin_manager: pluggy.PluginManager) -> Dict[str, omnisolve
     return {plugin.name: plugin for plugin in plugin_manager.hook.get_plugin()}
 
 
-def main():
+def main(argv=None):
     """Entrypoint of omnisolver."""
     root_parser = argparse.ArgumentParser()
     common_parser = argparse.ArgumentParser()
@@ -51,7 +51,7 @@ def main():
         )
         plugin.populate_parser(sub_parser)
 
-    args = root_parser.parse_args()
+    args = root_parser.parse_args(argv)
 
     chosen_plugin = all_plugins[args.solver]
     sampler = chosen_plugin.create_sampler(
@@ -64,8 +64,4 @@ def main():
         bqm, **omnisolver.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args)
     )
 
-    result.to_pandas_dataframe().to_csv(args.output)
-
-
-if __name__ == "__main__":
-    main()
+    result.to_pandas_dataframe().to_csv(args.output, index=False)
