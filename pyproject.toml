@@ -1,3 +1,50 @@
+[build-system]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=3.4", "setuptools_scm_git_archive"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omnisolver"
+description = "Extensible framework for creating and running Binary Quadratic Model solvers and samplers."
+readme = "README.md"
+authors = [
+    {name="Konrad Jałowiecki", email="dexter2206@gmail.com"},
+    {name="Łukasz Pawela", email="lukasz.pawela@gmail.com"}
+]
+license = {text = "Apache-2.0"}
+classifiers = [
+    "Intended Audience :: Other Audience",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Physics"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "dimod >= 0.9.10",
+    "numpy >= 1.19.4",
+    "pluggy >= 0.13.1",
+    "PyYAML >= 5.3.1",
+    "pandas >= 1.1.4"
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = ["pytest>=6.1.2", "pytest-mock>=3.3.1", "pytest-cov[toml]>=2.12.1"]
+
+[project.scripts]
+omnisolver = "omnisolver.cmd:main"
+
+[project.entry-points."omnisolver"]
+random = "omnisolver.random"
+
+[project.urls]
+repository = "https://github.com/euro-hpc-pl/omnisolver"
+
+[tool.setuptools_scm]
+
+[tool.setuptools.packages]
+find = {exclude = ["tests"], namespaces = true}
+
 [tool.black]
 line-length = 100
 include = '\.pyi?$'
@@ -8,7 +55,6 @@ exclude = '''
   | \.venv
 )/
 '''
-[build-system]
-requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]>=3.4", "setuptools_scm_git_archive"]
-build-backend = "setuptools.build_meta"
-[tool.setuptools_scm]
+
+[tools.coverage.run]
+relative_files = true
