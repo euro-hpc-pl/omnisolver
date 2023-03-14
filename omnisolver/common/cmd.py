@@ -4,19 +4,21 @@ from typing import Dict
 
 import pluggy
 
-import omnisolver.plugin
-from omnisolver.serialization import bqm_from_coo
+import omnisolver.common.plugin
+from omnisolver.common.serialization import bqm_from_coo
 
 
 def get_plugin_manager() -> pluggy.PluginManager:
     """Construct plugin manager aware of all defined plugins for omnisolver."""
     manager = pluggy.PluginManager("omnisolver")
-    manager.add_hookspecs(omnisolver.plugin)
+    manager.add_hookspecs(omnisolver.common.plugin)
     manager.load_setuptools_entrypoints("omnisolver")
     return manager
 
 
-def get_all_plugins(plugin_manager: pluggy.PluginManager) -> Dict[str, omnisolver.plugin.Plugin]:
+def get_all_plugins(
+    plugin_manager: pluggy.PluginManager,
+) -> Dict[str, omnisolver.common.plugin.Plugin]:
     """Get all plugins defined for omnisolver."""
     return {plugin.name: plugin for plugin in plugin_manager.hook.get_plugin()}
 
@@ -55,13 +57,14 @@ def main(argv=None):
 
     chosen_plugin = all_plugins[args.solver]
     sampler = chosen_plugin.create_sampler(
-        **omnisolver.plugin.filter_namespace_by_iterable(args, chosen_plugin.init_args)
+        **omnisolver.common.plugin.filter_namespace_by_iterable(args, chosen_plugin.init_args)
     )
 
     bqm = bqm_from_coo(args.input, vartype=args.vartype)
 
     result = sampler.sample(
-        bqm, **omnisolver.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args)
+        bqm,
+        **omnisolver.common.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args),
     )
 
     result.to_pandas_dataframe().to_csv(args.output, index=False)

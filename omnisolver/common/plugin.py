@@ -59,7 +59,7 @@ def plugin_from_specification(specification, loader=importlib.import_module) -> 
 
 
 @plugin_spec
-def get_plugin() -> Plugin:
+def get_plugin() -> Plugin:  # type: ignore
     """Hook for defining plugin instances."""
 
 

@@ -5,7 +5,7 @@ import importlib
 
 import pytest
 
-from omnisolver.plugin import (
+from omnisolver.common.plugin import (
     add_argument,
     filter_namespace_by_iterable,
     import_object,
@@ -79,7 +79,6 @@ def test_importing_object_by_dotted_path_the_object_retrieves_it_from_imported_m
 
 
 class TestCreatingPluginFromSchema:
-
     CORRECT_SPECIFICATION = {
         "schema_version": 1,
         "name": "random",

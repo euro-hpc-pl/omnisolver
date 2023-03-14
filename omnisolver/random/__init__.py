@@ -5,7 +5,7 @@ This also serves as a reference implementation of omnisolver plugins.
 from pkg_resources import resource_stream
 from yaml import safe_load
 
-from omnisolver.plugin import Plugin, plugin_from_specification, plugin_impl
+from omnisolver.common.plugin import Plugin, plugin_from_specification, plugin_impl
 
 
 @plugin_impl

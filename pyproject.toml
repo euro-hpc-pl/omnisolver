@@ -30,9 +30,16 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 test = ["pytest>=6.1.2", "pytest-mock>=3.3.1", "pytest-cov[toml]>=2.12.1"]
+docs = [
+    "sphinx~=6.1.3",
+    "sphinx-autoapi~=2.0.1",
+    "pydata-sphinx-theme~=0.13.1",
+    "sphinx-term~=0.1",
+    "myst-parser~=1.0.0"
+]
 
 [project.scripts]
-omnisolver = "omnisolver.cmd:main"
+omnisolver = "omnisolver.common.cmd:main"
 
 [project.entry-points."omnisolver"]
 random = "omnisolver.random"
