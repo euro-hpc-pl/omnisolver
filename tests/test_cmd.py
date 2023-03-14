@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from omnisolver.cmd import main
+from omnisolver.common.cmd import main
 
 SMALL_QUBO = """
 2 3 -1

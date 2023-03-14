@@ -6,7 +6,7 @@ from typing import Any, Dict
 import pytest
 from dimod import vartypes
 
-from omnisolver.serialization import bqm_from_coo
+from omnisolver.common.serialization import bqm_from_coo
 
 
 def make_coo(string):
