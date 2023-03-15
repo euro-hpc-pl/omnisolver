@@ -1,8 +1,11 @@
-# Omnisolver
+
+![Logo](https://raw.githubusercontent.com/euro-hpc-pl/omnisolver/master/logo.png)
+*Omnisolver is a collection of Binary Quadratic Model solvers and a framework for implementing them.*
+
 [![Build Status](https://travis-ci.org/omnisolver/omnisolver.svg?branch=master)](https://travis-ci.org/omnisolver/omnisolver)
 [![Documentation Status](https://readthedocs.org/projects/omnisolver/badge/?version=latest)](https://omnisolver.readthedocs.io/en/latest/?badge=latest)
 
-Omnisolver is a collection of Binary Quadratic Model solvers and a framework for implementing them.
+
 
 ## Installation and getting started
 
