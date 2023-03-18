@@ -37,6 +37,7 @@ docs = [
     "sphinx-term~=0.1",
     "myst-parser~=1.0.0"
 ]
+dev = ["mypy==1.1.1", "black==23.1.0", "flake8==6.0.0"]
 
 [project.scripts]
 omnisolver = "omnisolver.common.cmd:main"
