@@ -42,8 +42,4 @@ jobs:
             pre-commit install
             pre-commit run -a
       - name: Run mypy
-        uses: sasanquaneuf/mypy-github-action@releases/v1
-        with:
-          checkName: run_quality_checks
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mypy --strict --namespace-packages --explicit-package-bases $(git ls-files '*.py')
