@@ -26,7 +26,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
           fail_ci_if_error: true
 
-  run_quality_cheks:
+  run_quality_checks:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
