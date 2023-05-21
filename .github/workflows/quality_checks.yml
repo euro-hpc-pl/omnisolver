@@ -42,4 +42,4 @@ jobs:
             pre-commit install
             pre-commit run -a
       - name: Run mypy
-        run: mypy --install-types --namespace-packages --explicit-package-bases $(git ls-files '*.py')
+        run: mypy --install-types --non-interactive --namespace-packages --explicit-package-bases $(git ls-files '*.py')
