@@ -1,5 +1,5 @@
-import dimod
 import pytest
+from dimod import BQM
 
 from omnisolver.random import get_plugin
 from omnisolver.random.sampler import RandomSampler
@@ -7,7 +7,7 @@ from omnisolver.random.sampler import RandomSampler
 
 @pytest.fixture
 def bqm():
-    return dimod.BQM(
+    return BQM(
         {0: 0.5, 1: -0.25, 4: 2.0},
         {(0, 1): -1, (2, 3): 1.2, (1, 4): -1.0},
         vartype="BINARY",
