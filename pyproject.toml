@@ -68,3 +68,11 @@ exclude = '''
 
 [tools.coverage.run]
 relative_files = true
+
+[tool.mypy]
+namespace_packages = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = "pluggy"
+ignore_missing_imports = true

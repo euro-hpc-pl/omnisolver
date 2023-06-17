@@ -80,7 +80,7 @@ def filter_namespace_by_iterable(
 TYPE_MAP = {"str": str, "int": int, "float": float}
 
 
-def add_argument(parser: argparse.ArgumentParser, specification: Dict[str, Any]):
+def add_argument(parser: argparse.ArgumentParser, specification: Dict[str, Any]) -> None:
     """Given specification of the argument, add it to parser."""
     specification = copy.deepcopy(specification)
     arg_name = f"--{specification.pop('name')}"
