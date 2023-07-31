@@ -60,8 +60,11 @@ $ omnisolver pt --vartype SPIN instance.txt
 
 ````{only} latexpdf
 ## Documentation
+
 ```{toctree}
 :maxdepth: 1
+
+creating_plugin.md
 ```
 ````
 
