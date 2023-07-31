@@ -60,7 +60,15 @@ $ omnisolver pt --vartype SPIN instance.txt
 
 ````{only} latexpdf
 ## Documentation
+
 ```{toctree}
 :maxdepth: 1
+
+creating_plugin.md
 ```
 ````
+
+## List of available plugins
+
+ - [omnisolver-pt](https://omnisolver-pt.readthedocs.io/en/latest/): plugin implementing Parallel-Tempering sampler.
+ - [omnisolver-bruteforce](https://omnisolver-bruteforce.readthedocs.io/en/latest/): plugin implementing bruteforce (a.k.a exhaustive search) sampler. Capable of utilizing CUDA-enabled GPUs for accelerating computation.
