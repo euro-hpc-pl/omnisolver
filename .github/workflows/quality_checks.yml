@@ -1,4 +1,5 @@
 name: Tests and quality checks
+
 on: [pull_request]
 
 jobs:
