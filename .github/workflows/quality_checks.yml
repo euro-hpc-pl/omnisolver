@@ -1,5 +1,4 @@
-name: Run tests and other quality checks
-
+name: Tests and quality checks
 on: [pull_request]
 
 jobs:
