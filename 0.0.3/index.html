@@ -16,7 +16,7 @@
     
     
       
-        <title>Omnisolver</title>
+        <title>Omnisolver - Omnisolver</title>
       
     
     
@@ -44,6 +44,8 @@
     
       <link rel="stylesheet" href="stylesheets/extra.css">
     
+      <link rel="stylesheet" href="termynal.css">
+    
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -69,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#omnisolver" class="md-skip">
+        <a href="#why-omnisolver" class="md-skip">
           Skip to content
         </a>
       
@@ -293,8 +295,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -307,15 +307,15 @@
     Why Omnisolver?
   </a>
   
-    <nav class="md-nav" aria-label="Why Omnisolver?">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#benefits-for-the-end-users" class="md-nav__link">
     Benefits for the end-users
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Benefits for the end-users">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#benefits-for-solver-creators" class="md-nav__link">
@@ -326,6 +326,27 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    Quickstart
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    What's next?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#citing" class="md-nav__link">
+    Citing
+  </a>
   
 </li>
       
@@ -344,17 +365,28 @@
                   
 
 
-<h1 id="omnisolver">Omnisolver</h1>
+  <h1>Omnisolver</h1>
+
+<style>
+.md-content .md-typeset h1 { display: none; }
+</style>
+
 <p align="center">
-  <a href="https://fastapi.tiangolo.com"><img src="assets/logo-large.png" alt="FastAPI"></a>
+    <a href="https://github.com/euro-hpc-pl/omnisolver"><img src="assets/logo-large.png" alt="Omnisolver"></a>
 </p>
 
+<hr />
 <p>Omnisolver is a collection of Binary Quadratic Model solvers and a framework for implementing them.</p>
 <h2 id="why-omnisolver">Why Omnisolver?</h2>
-<h3 id="benefits-for-the-end-users">Benefits for the end-users</h3>
+<h2 id="benefits-for-the-end-users">Benefits for the end-users</h2>
 <p>Omnisolver contains a selection of standard and more sophisticated algorithms for solving BQMs. All solvers are available through intuitive CLI or from Python scripts as dimod based Samplers.</p>
 <h3 id="benefits-for-solver-creators">Benefits For solver creators</h3>
 <p>Omnisolver allows developer to focus on algorithms instead of common tasks like handling input/output or creating CLI.</p>
+<h2 id="quickstart">Quickstart</h2>
+<div class="termy" data-termynal data-ty-macos data-ty-title="bash"><span class="termynal-comment" data-ty># Install base omnisolver package</span><span data-ty="input" data-ty-prompt="$">pip install omnisolver</span><span data-ty="progress"></span><span data-ty>Successfuly installed omnisolver</span><span class="termynal-comment" data-ty># Install chosen plugins (e.g. parallel-tempering solver)</span><span data-ty="input" data-ty-prompt="$">pip install omnisolver-pt</span><span data-ty="progress"></span><span data-ty>Successfuly installed omnisolver-pt</span><span class="termynal-comment" data-ty># Create an instance file in COOrdinate format</span><span data-ty="input" data-ty-prompt="$">echo &quot;0 1 1.0</span><span data-ty="input" data-ty-prompt="&gt;">1 2 1.0</span><span data-ty="input" data-ty-prompt="&gt;">2 0 1.0&quot; </span><span class="termynal-comment" data-ty># Run solver</span><span data-ty="input" data-ty-prompt="$">omnisolver pt --vartype SPIN instance.txt</span><span data-ty>0,1,2,energy,num_occurrences1,-1,-1,-1.0,1<br></span></div>
+
+<h2 id="whats-next">What's next?</h2>
+<h2 id="citing">Citing</h2>
 
 
 
@@ -399,6 +431,8 @@
     
     
       <script src="assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+        <script src="termynal.js"></script>
       
     
   </body>
