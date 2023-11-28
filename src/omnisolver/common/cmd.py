@@ -1,26 +1,23 @@
 """Command line interface for omnisolver."""
 import argparse
+import sys
 from typing import Dict
 
-import pluggy
+if sys.version_info < (3, 10):
+    from importlib_metadata import entry_points
+else:
+    from importlib.metadata import entry_points
 
 import omnisolver.common.plugin
 from omnisolver.common.serialization import bqm_from_coo
 
 
-def get_plugin_manager() -> pluggy.PluginManager:
-    """Construct plugin manager aware of all defined plugins for omnisolver."""
-    manager = pluggy.PluginManager("omnisolver")
-    manager.add_hookspecs(omnisolver.common.plugin)
-    manager.load_setuptools_entrypoints("omnisolver")
-    return manager
-
-
-def get_all_plugins(
-    plugin_manager: pluggy.PluginManager,
-) -> Dict[str, omnisolver.common.plugin.Plugin]:
+def get_all_plugins() -> Dict[str, omnisolver.common.plugin.Plugin]:
     """Get all plugins defined for omnisolver."""
-    return {plugin.name: plugin for plugin in plugin_manager.hook.get_plugin()}
+    return {
+        (plugin := entry_point.load().get_plugin()).name: plugin
+        for entry_point in entry_points(group="omnisolver")
+    }
 
 
 def main(argv=None):
@@ -45,7 +42,7 @@ def main(argv=None):
 
     solver_commands = root_parser.add_subparsers(title="Solvers", dest="solver", required=True)
 
-    all_plugins = get_all_plugins(get_plugin_manager())
+    all_plugins = get_all_plugins()
 
     for plugin in all_plugins.values():
         sub_parser = solver_commands.add_parser(

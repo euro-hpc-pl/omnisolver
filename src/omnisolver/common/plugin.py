@@ -5,12 +5,8 @@ import importlib
 from typing import Any, Callable, Dict, Iterable, NamedTuple, TypeVar
 
 import dimod
-import pluggy
 
 T = TypeVar("T")
-
-plugin_spec = pluggy.HookspecMarker("omnisolver")
-plugin_impl = pluggy.HookimplMarker("omnisolver")
 
 
 class Plugin(NamedTuple):
@@ -56,11 +52,6 @@ def plugin_from_specification(specification, loader=importlib.import_module) -> 
         init_args=[arg["name"] for arg in specification["init_args"]],
         sample_args=[arg["name"] for arg in specification["sample_args"]],
     )
-
-
-@plugin_spec
-def get_plugin() -> Plugin:  # type: ignore
-    """Hook for defining plugin instances."""
 
 
 def filter_namespace_by_iterable(

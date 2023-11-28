@@ -22,7 +22,6 @@ requires-python = ">=3.8"
 dependencies = [
     "dimod >= 0.9.10",
     "numpy >= 1.19.4",
-    "pluggy >= 0.13.1",
     "PyYAML >= 5.3.1",
     "pandas >= 1.1.4"
 ]
@@ -50,8 +49,11 @@ repository = "https://github.com/euro-hpc-pl/omnisolver"
 
 [tool.setuptools_scm]
 
+[tool.setuptools]
+include-package-data = true
+
 [tool.setuptools.packages]
-find = {exclude = ["tests"], namespaces = true}
+find = {exclude = ["tests"], namespaces = true, where = ["src"]}
 
 [tool.black]
 line-length = 100
