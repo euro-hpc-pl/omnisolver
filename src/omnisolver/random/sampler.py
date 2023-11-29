@@ -32,7 +32,8 @@ class RandomSampler(Sampler):
         energies = [bqm.energy(sample) for sample in samples]
 
         return cast(
-            SampleSet, SampleSet.from_samples(samples, energy=energies, vartype=bqm.vartype)
+            SampleSet,
+            SampleSet.from_samples(samples, energy=energies, vartype=bqm.vartype),
         )
 
     @property

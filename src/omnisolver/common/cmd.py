@@ -40,13 +40,18 @@ def main(argv=None):
         "--vartype", help="Variable type", choices=["SPIN", "BINARY"], default="BINARY"
     )
 
-    solver_commands = root_parser.add_subparsers(title="Solvers", dest="solver", required=True)
+    solver_commands = root_parser.add_subparsers(
+        title="Solvers", dest="solver", required=True
+    )
 
     all_plugins = get_all_plugins()
 
     for plugin in all_plugins.values():
         sub_parser = solver_commands.add_parser(
-            plugin.name, parents=[common_parser], add_help=False, description=plugin.description
+            plugin.name,
+            parents=[common_parser],
+            add_help=False,
+            description=plugin.description,
         )
         plugin.populate_parser(sub_parser)
 
@@ -54,14 +59,18 @@ def main(argv=None):
 
     chosen_plugin = all_plugins[args.solver]
     sampler = chosen_plugin.create_sampler(
-        **omnisolver.common.plugin.filter_namespace_by_iterable(args, chosen_plugin.init_args)
+        **omnisolver.common.plugin.filter_namespace_by_iterable(
+            args, chosen_plugin.init_args
+        )
     )
 
     bqm = bqm_from_coo(args.input, vartype=args.vartype)
 
     result = sampler.sample(
         bqm,
-        **omnisolver.common.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args),
+        **omnisolver.common.plugin.filter_namespace_by_iterable(
+            args, chosen_plugin.sample_args
+        ),
     )
 
     result.to_pandas_dataframe().to_csv(args.output, index=False)

@@ -65,18 +65,24 @@ def filter_namespace_by_iterable(
     return dictionary containing mapping attribute name -> attribute value for every
      attribute of a signature such that its name is in attribute_filter.
     """
-    return {key: value for key, value in vars(namespace).items() if key in attribute_filter}
+    return {
+        key: value for key, value in vars(namespace).items() if key in attribute_filter
+    }
 
 
 TYPE_MAP = {"str": str, "int": int, "float": float}
 
 
-def add_argument(parser: argparse.ArgumentParser, specification: Dict[str, Any]) -> None:
+def add_argument(
+    parser: argparse.ArgumentParser, specification: Dict[str, Any]
+) -> None:
     """Given specification of the argument, add it to parser."""
     specification = copy.deepcopy(specification)
     arg_name = f"--{specification.pop('name')}"
     if "type" in specification:
-        specification["type"] = TYPE_MAP.get(specification["type"], specification["type"])
+        specification["type"] = TYPE_MAP.get(
+            specification["type"], specification["type"]
+        )
     parser.add_argument(arg_name, **specification)
 
 
