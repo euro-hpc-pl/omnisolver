@@ -32,7 +32,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: "3.10"
       - uses: actions/checkout@v2
       - name: Setup poetry
         uses: abatilo/actions-poetry@v2
@@ -43,4 +43,4 @@ jobs:
             pre-commit install
             pre-commit run -a
       - name: Run mypy
-        run: poetry run mypy --install-types --non-interactive --namespace-packages --explicit-package-bases src
+        run: MYPYPATH=src poetry run mypy --install-types --non-interactive --namespace-packages --explicit-package-bases src
