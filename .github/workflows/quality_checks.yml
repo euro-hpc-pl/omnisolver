@@ -19,7 +19,7 @@ jobs:
           python -m pip install --upgrade pip poetry
           poetry install
       - name: Run unit tests
-        run: pytest --cov=omnisolver --cov-report=xml
+        run: python -m pytest --cov=omnisolver --cov-report=xml
       - name: Report coverage
         uses: codecov/codecov-action@v2
         with:
