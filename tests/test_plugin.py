@@ -31,10 +31,19 @@ def test_filtering_namespace_by_iterable_extracts_only_attributes_with_names_fro
                 "default": 0.5,
             },
             "--prob",
-            {"help": "probability of choosing 1 (default 0.5)", "type": float, "default": 0.5},
+            {
+                "help": "probability of choosing 1 (default 0.5)",
+                "type": float,
+                "default": 0.5,
+            },
         ),
         (
-            {"name": "num_reads", "help": "number of samples to draw", "type": "int", "default": 1},
+            {
+                "name": "num_reads",
+                "help": "number of samples to draw",
+                "type": "int",
+                "default": 1,
+            },
             "--num_reads",
             {"help": "number of samples to draw", "type": int, "default": 1},
         ),
@@ -61,7 +70,9 @@ def test_adding_argument_from_specification_to_parser_populates_all_fields_prese
     parser.add_argument.assert_called_once_with(expected_name, **expected_kwargs)
 
 
-def test_when_importing_object_by_dotted_path_loader_is_called_with_modules_path(mocker):
+def test_when_importing_object_by_dotted_path_loader_is_called_with_modules_path(
+    mocker,
+):
     loader = mocker.create_autospec(importlib.import_module)
 
     import_object("omnisolver.pkg.my_sampler.CustomSampler", loader)
@@ -69,7 +80,9 @@ def test_when_importing_object_by_dotted_path_loader_is_called_with_modules_path
     loader.assert_called_once_with("omnisolver.pkg.my_sampler")
 
 
-def test_importing_object_by_dotted_path_the_object_retrieves_it_from_imported_module(mocker):
+def test_importing_object_by_dotted_path_the_object_retrieves_it_from_imported_module(
+    mocker,
+):
     loader = mocker.create_autospec(importlib.import_module)
     loader.return_value.CustomSampler = type("CustomSampler", tuple(), {})
 
@@ -93,7 +106,12 @@ class TestCreatingPluginFromSchema:
             }
         ],
         "sample_args": [
-            {"name": "num_reads", "help": "number of samples to draw", "type": "int", "default": 1},
+            {
+                "name": "num_reads",
+                "help": "number of samples to draw",
+                "type": "int",
+                "default": 1,
+            },
         ],
     }
 
@@ -138,7 +156,9 @@ class TestCreatingPluginFromSchema:
                     type=float,
                     default=0.5,
                 ),
-                mocker.call("--num_reads", help="number of samples to draw", type=int, default=1),
+                mocker.call(
+                    "--num_reads", help="number of samples to draw", type=int, default=1
+                ),
             ],
             any_order=False,
         )

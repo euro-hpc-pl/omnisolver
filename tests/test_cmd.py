@@ -30,5 +30,10 @@ def test_command_line_interface_accepts_common_and_solver_arguments(tmp_path):
 
     df = pd.read_csv(output_file)
     print(df)
-    assert df.shape == (13, 6)  # 6 = 4 vars + one column for energy and one for num_occurrences
-    np.testing.assert_array_equal(df.columns, ["0", "1", "2", "3", "energy", "num_occurrences"])
+    assert df.shape == (
+        13,
+        6,
+    )  # 6 = 4 vars + one column for energy and one for num_occurrences
+    np.testing.assert_array_equal(
+        df.columns, ["0", "1", "2", "3", "energy", "num_occurrences"]
+    )
