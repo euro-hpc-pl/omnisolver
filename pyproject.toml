@@ -45,3 +45,8 @@ pattern = "default-unprefixed"
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
 build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.mypy]
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = "src/"
