@@ -4,7 +4,7 @@ import sys
 from typing import Dict
 
 if sys.version_info < (3, 10):
-    from importlib_metadata import entry_points
+    from importlib_metadata import entry_points  # pragma: no cover
 else:
     from importlib.metadata import entry_points
 
