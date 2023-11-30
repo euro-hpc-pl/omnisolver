@@ -59,9 +59,33 @@ $ echo "0 1 1.0
 > 2 0 1.0" > instance.txt
 # Run solver
 $ omnisolver pt --vartype SPIN instance.txt
-0,1,2,energy,num_occurrences1,-1,-1,-1.0,1
+0,1,2,energy,num_occurrences
+1,-1,-1,-1.0,1
 ```
 
 ## What's next?
 
+Here are some resources to get you started:
+
+- Start with user guide to learn about the installation methods and general usage patterns.
+- Discover available solvers in our plugin list.
+- If you are interested in developing your own solver, or are interested in in-depth details of how the Omnisolver
+  works, check our solver creator guide and reference manual.
+
 ## Citing
+
+If you used Omnisolver in your research, consider citing it in your paper.
+You can use the following BibTeX entry:
+
+```text
+@article{omnisolver2023,
+    title = {Omnisolver: An extensible interface to Ising spin–glass and QUBO solvers},
+    journal = {SoftwareX},
+    volume = {24},
+    pages = {101559},
+    year = {2023},
+    doi = {https://doi.org/10.1016/j.softx.2023.101559},
+    url = {https://www.softxjournal.com/article/S2352-7110(23)00255-8/},
+    author = {Konrad Jałowiecki and {\L}ukasz Pawela},
+}
+```
