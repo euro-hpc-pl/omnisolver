@@ -1,26 +1,23 @@
 """Command line interface for omnisolver."""
 import argparse
+import sys
 from typing import Dict
 
-import pluggy
+if sys.version_info < (3, 10):
+    from importlib_metadata import entry_points  # pragma: no cover
+else:
+    from importlib.metadata import entry_points
 
 import omnisolver.common.plugin
 from omnisolver.common.serialization import bqm_from_coo
 
 
-def get_plugin_manager() -> pluggy.PluginManager:
-    """Construct plugin manager aware of all defined plugins for omnisolver."""
-    manager = pluggy.PluginManager("omnisolver")
-    manager.add_hookspecs(omnisolver.common.plugin)
-    manager.load_setuptools_entrypoints("omnisolver")
-    return manager
-
-
-def get_all_plugins(
-    plugin_manager: pluggy.PluginManager,
-) -> Dict[str, omnisolver.common.plugin.Plugin]:
+def get_all_plugins() -> Dict[str, omnisolver.common.plugin.Plugin]:
     """Get all plugins defined for omnisolver."""
-    return {plugin.name: plugin for plugin in plugin_manager.hook.get_plugin()}
+    return {
+        (plugin := entry_point.load().get_plugin()).name: plugin
+        for entry_point in entry_points(group="omnisolver")
+    }
 
 
 def main(argv=None):
@@ -43,13 +40,18 @@ def main(argv=None):
         "--vartype", help="Variable type", choices=["SPIN", "BINARY"], default="BINARY"
     )
 
-    solver_commands = root_parser.add_subparsers(title="Solvers", dest="solver", required=True)
+    solver_commands = root_parser.add_subparsers(
+        title="Solvers", dest="solver", required=True
+    )
 
-    all_plugins = get_all_plugins(get_plugin_manager())
+    all_plugins = get_all_plugins()
 
     for plugin in all_plugins.values():
         sub_parser = solver_commands.add_parser(
-            plugin.name, parents=[common_parser], add_help=False, description=plugin.description
+            plugin.name,
+            parents=[common_parser],
+            add_help=False,
+            description=plugin.description,
         )
         plugin.populate_parser(sub_parser)
 
@@ -57,14 +59,18 @@ def main(argv=None):
 
     chosen_plugin = all_plugins[args.solver]
     sampler = chosen_plugin.create_sampler(
-        **omnisolver.common.plugin.filter_namespace_by_iterable(args, chosen_plugin.init_args)
+        **omnisolver.common.plugin.filter_namespace_by_iterable(
+            args, chosen_plugin.init_args
+        )
     )
 
     bqm = bqm_from_coo(args.input, vartype=args.vartype)
 
     result = sampler.sample(
         bqm,
-        **omnisolver.common.plugin.filter_namespace_by_iterable(args, chosen_plugin.sample_args),
+        **omnisolver.common.plugin.filter_namespace_by_iterable(
+            args, chosen_plugin.sample_args
+        ),
     )
 
     result.to_pandas_dataframe().to_csv(args.output, index=False)
