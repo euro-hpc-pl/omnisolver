@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: Omnisolver
+theme:
+  name: material
+  logo: assets/logo.png
+  palette:
+    primary: custom
+  features:
+    - navigation.tabs
+    - navigation.tracking
+extra:
+  version:
+    provider: mike
+extra_css:
+  - stylesheets/extra.css
+nav:
+  - User guide: userguide.md
+  - Reference manual: reference.md
+  - Plugin list: plugins.md
+plugins:
+  - search
+  - mike:
+      canonical_version: latest
+      version_selector: true
+  - termynal:
+      prompt_literal_start:
+        - "$"
+repo_name: Omnisolver
+repo_url: https://github.com/euro-hpc-pl/omnisolver
