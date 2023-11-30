@@ -15,6 +15,7 @@ extra_css:
   - stylesheets/extra.css
 nav:
   - User guide: userguide.md
+  - Solver creator guide: creatorguide.md
   - Reference manual: reference.md
   - Plugin list: plugins.md
 plugins:
