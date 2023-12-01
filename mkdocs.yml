@@ -28,3 +28,8 @@ plugins:
         - "$"
 repo_name: Omnisolver
 repo_url: https://github.com/euro-hpc-pl/omnisolver
+markdown_extensions:
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.tabbed:
+      alternate_style: true
