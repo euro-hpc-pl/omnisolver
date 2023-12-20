@@ -22,15 +22,31 @@ nav:
   - Plugin list: plugins.md
 plugins:
   - search
-  - with-pdf:
-      render_js: true
-      cover_subtitle: "An extensible interface to Ising spin–glass and QUBO solvers"
   - mike:
       canonical_version: latest
       version_selector: true
   - termynal:
       prompt_literal_start:
         - "$"
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            annotation_path: brief
+            show_source: false
+            show_signature_annotations: true
+            members_order: source
+            separate_signature: true
+            docstring_options:
+              ignore_init_summary: true
+              merge_init_into_class: true
+              show_docstring_returns: true
+
+
+  - with-pdf:
+       render_js: true
+       cover_subtitle: "An extensible interface to Ising spin–glass and QUBO solvers"
 repo_name: Omnisolver
 repo_url: https://github.com/euro-hpc-pl/omnisolver
 markdown_extensions:
