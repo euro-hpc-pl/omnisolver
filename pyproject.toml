@@ -39,6 +39,7 @@ termynal = "^0.11.1"
 mkdocs-with-pdf = "^0.9.3"
 beautifulsoup4 = "~4.9.3"
 weasyprint = "^57"
+mkdocstrings = "^0.24.0"
 
 [tool.poetry.scripts]
 omnisolver = "omnisolver.common.cmd:main"
