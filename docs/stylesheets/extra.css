@@ -2,3 +2,11 @@
   --md-primary-fg-color:        #E86F2E;
   --md-primary-bg-color:        white;
 }
+
+@media print {
+  /* Adjusts positioning of admonition icon */
+  .md-typeset :is(.admonition-title,summary):before {
+    top: 0.8rem;
+    left: 0.6rem;
+  }
+}

@@ -1,5 +1,7 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 site_name: Omnisolver
+site_author: "Konrad Jałowiecki & Łukasz Pawela"
+copyright: ""
 theme:
   name: material
   logo: assets/logo.png
@@ -20,6 +22,8 @@ nav:
   - Plugin list: plugins.md
 plugins:
   - search
+  - with-pdf:
+      cover_subtitle: "An extensible interface to Ising spin–glass and QUBO solvers"
   - mike:
       canonical_version: latest
       version_selector: true
