@@ -23,6 +23,7 @@ nav:
 plugins:
   - search
   - with-pdf:
+      render_js: true
       cover_subtitle: "An extensible interface to Ising spin–glass and QUBO solvers"
   - mike:
       canonical_version: latest
