@@ -17,11 +17,12 @@ extra_css:
   - stylesheets/extra.css
 nav:
   - User guide: userguide.md
-  - Solver creator guide: creatorguide.md
+  #- Solver creator guide: creatorguide.md
   - Reference manual:
     - omnisolver.common.cmd: reference/omnisolver_common_cmd.md
     - omnisolver.common.plugin: reference/omnisolver_common_plugin.md
     - omnisolver.common.serialization: reference/omnisolver_common_serialization.md
+    - omnisolver.random.sampler: reference/omnisolver_random_sampler.md
   - Plugin list: plugins.md
 plugins:
   - search
@@ -46,9 +47,9 @@ plugins:
               ignore_init_summary: true
               merge_init_into_class: true
               show_docstring_returns: true
-  # - with-pdf:
-  #      render_js: true
-  #      cover_subtitle: "An extensible interface to Ising spin–glass and QUBO solvers"
+  - with-pdf:
+       render_js: true
+       cover_subtitle: "An extensible interface to Ising spin–glass and QUBO solvers"
 repo_name: Omnisolver
 repo_url: https://github.com/euro-hpc-pl/omnisolver
 markdown_extensions:

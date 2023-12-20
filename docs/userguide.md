@@ -10,8 +10,10 @@ This guide covers the following topics:
 - Prerequisites
 - Installation.
 - Key concepts:
-  - Binary Quadratic Models.
-  - Input nad output file formats.
+
+    - Binary Quadratic Models.
+    - Input nad output file formats.
+
 - Solving BQMs using Omnisolver's command line interface (CLI).
 - Advanced usage: using Omnisolver from Python scripts.
 
@@ -122,9 +124,8 @@ $$
 
 For such a Hamiltonian we have $h_1 = -1, h_2 = 2, J_{23}=2, J_{13}=-2$. The omitted coefficients $h_3$ and $J_{13}$, as well as the constant offset are implicitly equal to zero.
 
-### Input and output file formats
+### Input file format
 
-#### Input files
 The Omnisolver understands input COOrdinate format (COO). COO files are plain text files with comprising rows of the form `i j Q_ij` where:
 
 - `i` and `j` are indices of variables,

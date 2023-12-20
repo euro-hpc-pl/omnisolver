@@ -22,13 +22,22 @@ class RandomSampler(Sampler):
     def __init__(self, prob: float) -> None:
         self.prob = prob
 
-    def get_random_sample(self, bqm: BQM) -> Dict[Hashable, int]:
+    def _get_random_sample(self, bqm: BQM) -> Dict[Hashable, int]:
         """Get random assignment of variables in given BQM."""
         get_random_value = partial(self.variable_samplers[bqm.vartype], prob=self.prob)
         return {variable: get_random_value() for variable in bqm.variables}
 
-    def sample(self, bqm: BQM, num_reads=1, **parameters) -> SampleSet:
-        samples = [self.get_random_sample(bqm) for _ in range(num_reads)]
+    def sample(self, bqm: BQM, num_reads: int = 1, **parameters) -> SampleSet:
+        """Sample given BQM by choosing solutions at random.
+
+        Args:
+            bqm: Binary Quadratic Model to solve.
+            num_reads: Number of samples to return.
+
+        Returns:
+            SampleSet with the result.
+        """
+        samples = [self._get_random_sample(bqm) for _ in range(num_reads)]
         energies = [bqm.energy(sample) for sample in samples]
 
         return cast(
