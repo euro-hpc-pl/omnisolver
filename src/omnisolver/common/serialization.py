@@ -9,7 +9,7 @@ from dimod import BQM
 def bqm_from_coo(coo: Union[PathLike, TextIO], vartype="BINARY") -> BQM:
     """Read bqm from coordinate format.
 
-    This is intended as a replacement for dimod.serialization.coo.load,
+    This is intended as a replacement for `dimod.serialization.coo.load`,
     which sometimes handles integral coefficients poorly.
     """
     data_frame = pd.read_csv(coo, names=["i", "j", "coefficient"], sep=" ")
