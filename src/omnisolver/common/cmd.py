@@ -1,27 +1,36 @@
 """Command line interface for omnisolver."""
 import argparse
 import sys
-from typing import Dict
+from typing import Optional
 
 if sys.version_info < (3, 10):
     from importlib_metadata import entry_points  # pragma: no cover
 else:
     from importlib.metadata import entry_points
 
-import omnisolver.common.plugin
+from omnisolver.common.plugin import Plugin, filter_namespace_by_iterable
 from omnisolver.common.serialization import bqm_from_coo
 
 
-def get_all_plugins() -> Dict[str, omnisolver.common.plugin.Plugin]:
-    """Get all plugins defined for omnisolver."""
+def get_all_plugins() -> dict[str, Plugin]:
+    """Get all plugins defined for Omnisolver.
+
+
+    Returns:
+        A dictionary mapping plugin name to its definition.
+    """
     return {
         (plugin := entry_point.load().get_plugin()).name: plugin
         for entry_point in entry_points(group="omnisolver")
     }
 
 
-def main(argv=None):
-    """Entrypoint of omnisolver."""
+def main(argv: Optional[list[str]] = None) -> None:
+    """Entrypoint of omnisolver.
+
+    The entrypoint enumerates all plugins, dynamically creates the CLI and then appropriately
+    dispatches execution to the plugin selected by the user.
+    """
     root_parser = argparse.ArgumentParser()
     common_parser = argparse.ArgumentParser()
     common_parser.add_argument(
@@ -59,18 +68,14 @@ def main(argv=None):
 
     chosen_plugin = all_plugins[args.solver]
     sampler = chosen_plugin.create_sampler(
-        **omnisolver.common.plugin.filter_namespace_by_iterable(
-            args, chosen_plugin.init_args
-        )
+        **filter_namespace_by_iterable(args, chosen_plugin.init_args)
     )
 
     bqm = bqm_from_coo(args.input, vartype=args.vartype)
 
     result = sampler.sample(
         bqm,
-        **omnisolver.common.plugin.filter_namespace_by_iterable(
-            args, chosen_plugin.sample_args
-        ),
+        **filter_namespace_by_iterable(args, chosen_plugin.sample_args),
     )
 
     result.to_pandas_dataframe().to_csv(args.output, index=False)
