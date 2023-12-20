@@ -155,11 +155,12 @@ There are several things to note here:
    1 1 -1
    ```
 - The order of the variables in quadratic terms is unimportant (but see caveat below). Therefore, the following file is equivalent to the first one:
-    ```text
-    2 2 1.2
-    3 1 -2.5
-    3 2 2
-    1 1 -1 
+   ```text
+   2 2 1.2
+   3 1 -2.5
+   3 2 2
+   1 1 -1
+   ```
 
 !!! warning 
     If you specify the same quadratic term for the second time with reversed order of variables, both of the terms will be taken into account. Therefore, the following file is also equivalent to all the previous ones:
@@ -171,6 +172,142 @@ There are several things to note here:
     1 3 -1
     ```
 
+
+You might observe that the type of the problem (QUBO or Ising) is not specified in the input file. Moreover, it clearly cannot be inferred from the contents of the input file. The Omnisolver handles this via a command line switch, as we will see later in this guide.
 ## Solving BQMs using Omnisolver's CLI
 
+Once you determined which solver you want to use, it is time to solve a problem. As already mentioned, in this guide
+we will use `omnisolver-pt` plugin. If you followed the guide and installed everything, running `omnisolver -h` should
+give the following output:
+
+```text
+usage: omnisolver [-h] {pt,random} ...
+
+options:
+  -h, --help   show this help message and exit
+
+Solvers:
+  {pt,random}
+
+```
+
+The output tells us that we can run `omnisolver pt <arguments>`. Let's inspect what the arguments should
+look like by running `omnisolver pt -h`:
+
+```text
+usage: omnisolver pt [-h] [--output OUTPUT] [--vartype {SPIN,BINARY}] [--num_replicas NUM_REPLICAS] [--num_pt_steps NUM_PT_STEPS] [--num_sweeps NUM_SWEEPS] [--beta_min BETA_MIN] [--beta_max BETA_MAX] [--num_states NUM_STATES] input
+
+Parallel tempering sampler
+
+positional arguments:
+  input                 Path of the input BQM file in COO format. If not specified, stdin is used.
+
+options:
+  -h, --help            show this help message and exit
+  --output OUTPUT       Path of the output file. If not specified, stdout is used.
+  --vartype {SPIN,BINARY}
+                        Variable type
+  --num_replicas NUM_REPLICAS
+                        number of replicas to simulate (default 10)
+  --num_pt_steps NUM_PT_STEPS
+                        number of parallel tempering steps
+  --num_sweeps NUM_SWEEPS
+                        number of Monte Carlo sweeps per parallel tempering step
+  --beta_min BETA_MIN   inverse temperature of the hottest replica
+  --beta_max BETA_MAX   inverse temperature of the coldest replica
+  --num_states NUM_STATES
+                        number of lowest energy states to keep track of.
+```
+
+Let's break it down:
+
+- The sampler expects a single positional argument `input` which should be a path to the input file
+  in the format we discussed in the previous section.
+- Variable type is controlled by specifiying either `--vartype SPIN` (for Ising) or `--vartype BINARY` (for QUBO)
+- The output will be printed to stdout or, if `--output OUTPUT` is specified, stored in a given location.
+
+All the bullet points above are also true for other samplers - they constitute the part of the common interface.
+The other parameters are optional and algorithm-specific. By tuning them, you can improve performance, quality
+of solution or, as is the case here, number of states returned. Most samplers define sane defaults for optional
+parameters, so in principle all of them should be invokeable simply as:
+
+```shell
+omnisolver <solver name> <input file> --vartype <desired vartype>
+```
+
+Let us run our sampler on a simple problem defined in the previous section. To simplify, we will use zero-based
+indexing (so all the indices are decreased by 1). Here's our input file, which we will save as `"instance.txt"`:
+
+```text
+0 0 -1
+1 1 1.2
+1 2 2
+0 2 -2.5
+```
+
+Let us use the default arguments first. We can run:
+```shell
+omnisolver pt instance.txt --vartype SPIN
+```
+which should produce output roughly similar to the following one:
+```text
+0,1,2,energy,num_occurrences
+1,-1,1,-6.7,1
+```
+
+The actual output might be different, because the parallel-tempering sampler is randomized. In our case, we obtained a single sample $s_0=1, s_1=-1, s_2=1$ with the corresponding energy of $-6.7$. The last column, `num_occurrences` signifies that this particular sample ocured once. This will always be the case for the PT sampler. However, other samplers might report a given sample multiple times.
+
+Lastly, let's add some optional arguments. For instance, let's request 5 states instead of just one:
+
+```text
+0,1,2,energy,num_occurrences
+-1,1,-1,-2.3,1
+-1,-1,-1,-0.7,1
+1,-1,1,-6.7,1
+-1,-1,1,0.2999999999999998,1
+1,1,1,-0.2999999999999998,1
+```
+
+As expected we obtained multiple samples. Be aware that the samples are not sorted by energy!
+
 ## Advanced usage: using Omnisolver from Python scripts
+
+All samplers in Omnisolver can be also used in Python scripts. The steps are roughly as follows:
+
+- From the sampler's documentation, determine the class which is used for sampling.
+- Import this class and instantiate it.
+- Create an instance of `BQM`.
+- Run `sampler.sample` method.
+
+In case of the parallel-tempering, the sampler is implemented by class `omnisolver.pt.sampler.PTSampler`.
+
+We can import it as follows:
+
+```python
+from omnisolver.pt.sampler import PTSampler
+```
+
+The `PTSampler` can be instantiated without arguments, so instantiating it is really simple:
+
+```python
+sampler = PTSampler()
+```
+
+We can now define the Binary Quadratic Model. For simplicity, we will use the same coefficients as previously:
+```python
+from dimod import BQM
+
+bqm = BQM({0: -1, 1: 1.2}, {(1, 2): 2, (0, 2): -2.5}, vartype="SPIN")
+```
+
+Finally, we are able to solve our problem and print the solution:
+
+```python
+result = sampler.sample(bqm)
+print(result.first.energy)
+```
+
+In our case, we obtained the same solution as previously:
+```python
+Sample(sample={0: 1, 1: -1, 2: 1}, energy=-6.7, num_occurrences=1)
+```
