@@ -40,6 +40,7 @@ mkdocs-with-pdf = "^0.9.3"
 beautifulsoup4 = "~4.9.3"
 weasyprint = "^57"
 mkdocstrings = "^0.24.0"
+mkdocstrings-python = "^1.7.5"
 
 [tool.poetry.scripts]
 omnisolver = "omnisolver.common.cmd:main"
